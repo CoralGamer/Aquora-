@@ -1,29 +1,48 @@
-# Subfase 3.3: Área Administrativa Protegida y Dashboards Individuales con Notificaciones
+# Subfase 3.3: Área Administrativa Protegida, Creación de Cuentas de la Comunidad y Dashboards Individuales
 
-Esta subfase detalla el desarrollo de los tableros de control protegidos, segregando las pantallas del frontend según el rol autenticado de cada usuario y habilitando la configuración de alertas en Supabase.
+Esta subfase detalla el desarrollo de los tableros de control protegidos para administradores y miembros de la comunidad, incluyendo el **Módulo de Aprovisionamiento de Cuentas por correo** y la **Interfaz de Configuración de Perfil** para el cambio de contraseñas.
 
 ---
 
 ## 📊 1. Área Administrativa (Rol: `admin`)
 Solo accesible para usuarios autenticados cuyo perfil (`user_profiles.role`) sea `'admin'`.
 
-### Componentes Protegidos:
-* **Mapa Territorial de Riesgo:** El mapa Leaflet interactivo ampliado de 580px con control de calor epidemiológico cruzado con SIVIGILA.
-* **TelemetryCharts (Recharts Global):** Acceso a las curvas de tendencia históricas de todas las 8 comunidades de La Guajira.
-* **Visor 3D Interactivo:** Acceso a los planos del filtro inteligente.
-* **Gestión de Dispositivos:** Panel para aprobar y activar nuevas claves de dispositivo (`device_keys`) solicitadas por el público en el formulario de la sección Open Source.
+### Componentes de Monitoreo Global:
+* **Mapa de Riesgo Territorial Gigante (580px):** Mapa interactivo con Leaflet.js para vigilancia de las 8 comunidades.
+* **TelemetryCharts (Recharts Global):** Visualización de curvas de tendencia históricas de todas las comunidades.
+
+### 🆕 Módulo de Aprovisionamiento de Cuentas y Asignación de Filtros:
+Un formulario administrativo interactivo exclusivo para la Fundación Ábaco que permite:
+1. **Ingresar Correo y Nombre:** Para el nuevo miembro de la comunidad o nuevo administrador.
+2. **Definir Contraseña Temporal:** Generada automáticamente o ingresada manualmente (ej: `Aquora2026!`).
+3. **Asignación de Dispositivo IoT:** Menú desplegable dinámico que consulta la tabla `devices` y permite asociar de forma exclusiva un filtro físico (`device_id`) a esta nueva cuenta.
+4. **Envío y Registro Directo:** Llama a la API de Supabase Admin para registrar al usuario, confirmando su cuenta de inmediato y guardándolo en `public.user_profiles` con su rol (`community_member` o `admin`) y enlace de sensor.
 
 ---
 
 ## 🏠 2. Dashboard de Miembro de la Comunidad (Rol: `community_member`)
 Solo accesible para usuarios autenticados cuyo perfil tenga el rol `'community_member'`.
 
-### Características Individualizadas:
-1. **Monitoreo de Filtro Asignado:** Muestra únicamente las lecturas en tiempo real de su propio dispositivo familiar (basándose en el `device_id` enlazado en su perfil).
-   * Visualización simplificada del nivel de agua del tanque.
-   * Visualización del índice de pureza en sólidos TDS (ppm) y turbidez física (NTU).
-2. **Alertas de Calidad de Agua en Pantalla:**
-   * Mensajes urgentes como: *"⚠️ ¡Tu agua requiere filtrado! TDS superior a 400 ppm. Por favor revisa el estado del bagazo de caña o zeolita activa"*.
-3. **Panel de Notificaciones y Umbrales:**
-   * Formulario interactivo donde el miembro de la comunidad puede ajustar sus umbrales personalizados de alarma (ej: *"Notificarme si el TDS supera los 400 ppm o si el nivel del tanque cae por debajo de 20%"*).
-   * Selección de canales de comunicación preferidos (Correo electrónico o WhatsApp). Las preferencias se guardan en la columna `notification_preferences` en formato JSONB en Supabase.
+### Características Individuales:
+* **Mi Filtro Familiar:** Muestra en tiempo real las lecturas de TDS, turbidez y nivel únicamente del `device_id` enlazado en su cuenta de usuario.
+* **Alertas Sanitarias:** Notificación en pantalla si el agua supera los límites saludables de pureza.
+
+---
+
+## ⚙️ 3. Interfaz de Configuración de Perfil y Cambio de Contraseña
+
+Tanto los administradores como los miembros de la comunidad tendrán acceso a una pestaña de **"Mi Perfil"** en el portal web (y app móvil) que permite:
+
+1. **Gestión de Identidad:** Visualizar su nombre, correo, rol y el ID de su dispositivo hídrico enlazado.
+2. **Cambio de Contraseña Seguro:**
+   * Un formulario interactivo para ingresar su contraseña actual, nueva contraseña y confirmación.
+   * Llama de forma directa y segura a la API de Supabase Auth:
+     ```javascript
+     const handleUpdatePassword = async (newPassword) => {
+       const { error } = await supabase.auth.updateUser({
+         password: newPassword
+       });
+       if (!error) alert("¡Contraseña actualizada con éxito!");
+     };
+     ```
+   * Esto permite que el usuario reemplace la contraseña temporal asignada por el administrador en su primer inicio de sesión.
