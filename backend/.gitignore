@@ -1,0 +1,29 @@
+# ==========================================================
+# AQUORA BACKEND - SEGURIDAD DE REPOSITORIO
+# ==========================================================
+
+# Entornos virtuales locales
+venv/
+.venv/
+env/
+ENV/
+
+# Caché de ejecución de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Variables de entorno y secretos (Bloqueo absoluto)
+.env
+.env.*
+!.env.example
+
+# Pruebas y Cobertura
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs y bases de datos locales sqlite temporales
+*.log
+*.db
+*.sqlite
