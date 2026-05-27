@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "author": "Nicolas Archila & Susan Pulido + Antigravity / AQUORA Team",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-c-v4",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "potTDS",
+      "top": 120,
+      "left": -150,
+      "attrs": {
+        "label": "Sensor TDS (ppm)"
+      }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "potTurbidity",
+      "top": 120,
+      "left": 150,
+      "attrs": {
+        "label": "Sensor Turbidez (NTU)"
+      }
+    },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "sonarLevel",
+      "top": -180,
+      "left": 0,
+      "attrs": {
+        "label": "Nivel Tanque (%)"
+      }
+    }
+  ],
+  "connections": [
+    [ "esp:GND.1", "potTDS:GND", "black", [ "h-20", "v80" ] ],
+    [ "esp:3V3", "potTDS:VCC", "red", [ "h-30", "v60" ] ],
+    [ "potTDS:SIG", "esp:34", "green", [ "v-30", "h40" ] ],
+
+    [ "esp:GND.1", "potTurbidity:GND", "black", [ "h20", "v80" ] ],
+    [ "esp:3V3", "potTurbidity:VCC", "red", [ "h30", "v60" ] ],
+    [ "potTurbidity:SIG", "esp:35", "blue", [ "v-30", "h-40" ] ],
+
+    [ "esp:GND.1", "sonarLevel:GND", "black", [ "v-20", "h40" ] ],
+    [ "esp:3V3", "sonarLevel:VCC", "red", [ "v-20", "h-40" ] ],
+    [ "sonarLevel:TRIG", "esp:5", "orange", [ "v40", "h20" ] ],
+    [ "sonarLevel:ECHO", "esp:18", "yellow", [ "v40", "h-20" ] ]
+  ],
+  "serialMonitor": {
+    "display": "always",
+    "convertEol": true
+  },
+  "dependencies": {}
+}
