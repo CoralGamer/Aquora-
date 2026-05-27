@@ -3,6 +3,7 @@ from pydantic import BaseSettings
 class Settings(BaseSettings):
     SUPABASE_URL: str = "https://your-project.supabase.co"
     SUPABASE_KEY: str = "your-service-role-key"
+    SUPABASE_SERVICE_ROLE_KEY: str = "" # Clave service_role secreta para operaciones administrativas de Supabase Auth
     API_PORT: int = 8000
     PROJECT_NAME: str = "AQUORA Unified API"
 

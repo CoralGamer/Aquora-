@@ -335,5 +335,79 @@ def get_telemetry_history(community_id: str):
             detail=f"Error obteniendo histórico de telemetría: {e}"
         )
 
+class UserCreateIn(BaseModel):
+    email: str = Field(..., description="Correo electrónico del usuario")
+    password: str = Field(..., min_length=6, description="Contraseña temporal del usuario (mínimo 6 caracteres)")
+    full_name: str = Field(..., description="Nombre completo del miembro o administrador")
+    role: str = Field(..., description="Rol a asignar ('admin' o 'community_member')")
+    device_id: Optional[str] = Field(None, description="UUID del dispositivo IoT a enlazar (opcional)")
+
+@app.post("/api/v1/admin/users", status_code=status.HTTP_201_CREATED)
+def create_community_user(payload: UserCreateIn):
+    """
+    Endpoint administrativo seguro. Crea una nueva cuenta de usuario en Supabase Auth
+    con una contraseña temporal y su rol/dispositivo correspondiente,
+    sin comprometer la Service Role Key en el frontend público de React.
+    """
+    if not settings.SUPABASE_SERVICE_ROLE_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="La variable de entorno SUPABASE_SERVICE_ROLE_KEY no está configurada en el servidor backend. Esta clave secreta es necesaria para crear cuentas de usuario."
+        )
+
+    try:
+        import requests
+        
+        # Cabeceras requeridas por Supabase Auth Admin API (usando la Service Role Key secreta)
+        headers = {
+            "apikey": settings.SUPABASE_SERVICE_ROLE_KEY,
+            "Authorization": f"Bearer {settings.SUPABASE_SERVICE_ROLE_KEY}",
+            "Content-Type": "application/json"
+        }
+        
+        # Datos del nuevo usuario incluyendo metadatos para que el trigger SQL los procese automáticamente
+        auth_payload = {
+            "email": payload.email,
+            "password": payload.password,
+            "email_confirm": True, # Auto-confirmar el correo para omitir verificación
+            "user_metadata": {
+                "full_name": payload.full_name,
+                "role": payload.role,
+                "device_id": payload.device_id if payload.device_id else ""
+            }
+        }
+        
+        url = f"{settings.SUPABASE_URL}/auth/v1/admin/users"
+        response = requests.post(url, json=auth_payload, headers=headers)
+        
+        if response.status_code != 200 and response.status_code != 201:
+            try:
+                resp_data = response.json()
+                error_msg = resp_data.get("msg") or resp_data.get("message") or "Error desconocido de autenticación"
+            except Exception:
+                error_msg = response.text
+                
+            raise HTTPException(
+                status_code=response.status_code,
+                detail=f"Error en Supabase Auth al crear la cuenta: {error_msg}"
+            )
+            
+        new_user = response.json()
+        new_user_uuid = new_user.get("id")
+        
+        return {
+            "status": "success",
+            "message": "Usuario creado exitosamente con contraseña temporal y perfil enlazado en Supabase.",
+            "user_id": new_user_uuid
+        }
+        
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error interno aprovisionando cuenta de usuario: {e}"
+        )
+
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=settings.API_PORT, reload=True)
