@@ -1,0 +1,395 @@
+/* ==========================================================
+   AQUORA - SISTEMA DE DISEÑO PREMIUM (VANILLA CSS)
+   ========================================================== */
+
+:root {
+  /* Color Palette (HSL variables) */
+  --bg-dark: 224 71% 4%;       /* #020617 (Deep Slate) */
+  --bg-card: 222 47% 11%;      /* #0f172a (Slate 900) */
+  --bg-card-hover: 223 47% 16%;/* #1e293b (Slate 800) */
+  
+  --text-main: 210 40% 98%;    /* #f8fafc (Almost White) */
+  --text-muted: 215 20% 65%;   /* #94a3b8 (Slate 400) */
+  --text-dark: 215 16% 47%;    /* #64748b (Slate 500) */
+  
+  --primary: 199 89% 48%;      /* #0ea5e9 (Electric Cyan) */
+  --primary-glow: 199 89% 48% / 0.15;
+  --success: 142 71% 45%;      /* #10b981 (Emerald Green) */
+  --warning: 38 92% 50%;       /* #f59e0b (Amber Orange) */
+  --danger: 350 89% 60%;       /* #f43f5e (Rose Red) */
+  
+  --border-light: 217 32% 17% / 0.8;
+  --border-hover: 199 89% 48% / 0.4;
+  
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-title: 'Outfit', system-ui, -apple-system, sans-serif;
+  
+  --shadow-glow: 0 0 20px rgba(14, 165, 233, 0.15);
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset and Globals */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: hsl(var(--bg-dark));
+  color: hsl(var(--text-main));
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--bg-dark));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--bg-card));
+  border-radius: 4px;
+  border: 2px solid hsl(var(--bg-dark));
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
+
+/* Layout Utilities */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Glassmorphic Cards */
+.card {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid hsl(var(--border-light));
+  border-radius: 16px;
+  padding: 1.75rem;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-smooth);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: hsla(var(--border-hover));
+  box-shadow: var(--shadow-glow), var(--shadow-card);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  border: none;
+}
+
+.btn-primary {
+  background: hsl(var(--primary));
+  color: #000000;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px hsla(var(--primary) / 0.5);
+  background: hsl(199 89% 55%);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: hsl(var(--text-main));
+  border: 1px solid hsl(var(--border-light));
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: hsl(var(--text-muted));
+}
+
+/* Header & Navigation */
+.header {
+  border-bottom: 1px solid hsl(var(--border-light));
+  background: rgba(2, 6, 23, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 1rem 0;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  color: hsl(var(--text-muted));
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: var(--transition-smooth);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: hsl(var(--primary));
+  background: rgba(14, 165, 233, 0.08);
+}
+
+/* Real-Time Pulse Indicator */
+.pulse-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: hsl(var(--success));
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+/* Leaflet Dark Theme Overrides */
+.leaflet-container {
+  font-family: var(--font-body) !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: rgba(15, 23, 42, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-card) !important;
+  color: hsl(var(--text-main)) !important;
+}
+
+.leaflet-popup-tip {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.leaflet-bar {
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+.leaflet-bar a {
+  background-color: rgba(15, 23, 42, 0.95) !important;
+  color: hsl(var(--text-main)) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.leaflet-bar a:hover {
+  background-color: hsl(var(--bg-card-hover)) !important;
+  color: hsl(var(--primary)) !important;
+}
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(2, 6, 23, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.modal-content {
+  background: hsl(var(--bg-card));
+  border: 1px solid hsl(var(--border-light));
+  border-radius: 20px;
+  max-width: 500px;
+  width: 90%;
+  padding: 2.25rem;
+  box-shadow: var(--shadow-card), 0 0 40px rgba(14, 165, 233, 0.05);
+  position: relative;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Inputs and Forms */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: hsl(var(--text-muted));
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid hsl(var(--border-light));
+  border-radius: 10px;
+  color: hsl(var(--text-main));
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  transition: var(--transition-smooth);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 10px hsla(var(--primary) / 0.15);
+}
+
+/* Status Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-danger {
+  background: hsla(var(--danger) / 0.15);
+  color: hsl(var(--danger));
+  border: 1px solid hsla(var(--danger) / 0.3);
+}
+
+.badge-warning {
+  background: hsla(var(--warning) / 0.15);
+  color: hsl(var(--warning));
+  border: 1px solid hsla(var(--warning) / 0.3);
+}
+
+.badge-success {
+  background: hsla(var(--success) / 0.15);
+  color: hsl(var(--success));
+  border: 1px solid hsla(var(--success) / 0.3);
+}
+
+/* ==========================================================
+   ENHANCED GEOSPATIAL MONITORING GRAPHICS
+   ========================================================== */
+
+.dashboard-top-grid {
+  display: grid;
+  grid-template-columns: 1.62fr 1fr;
+  gap: 2rem;
+  align-items: stretch;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-top-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@keyframes markerPulse {
+  0% {
+    stroke-width: 2px;
+    stroke-opacity: 0.9;
+  }
+  50% {
+    stroke-width: 9px;
+    stroke-opacity: 0.35;
+  }
+  100% {
+    stroke-width: 2px;
+    stroke-opacity: 0.9;
+  }
+}
+
+.leaflet-marker-selected {
+  animation: markerPulse 1.8s infinite ease-in-out;
+  filter: drop-shadow(0 0 10px hsla(var(--primary) / 0.8));
+  transition: all 0.3s ease;
+}
+
+.leaflet-marker-normal {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.leaflet-marker-normal:hover {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.85));
+  stroke-width: 3px;
+  stroke: #ffffff !important;
+}
