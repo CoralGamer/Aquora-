@@ -1,0 +1,49 @@
+# ==========================================================
+# AQUORA MULTIPROYECTO - CONFIGURACIÓN SEGURA DE GITIGNORE
+# ==========================================================
+
+# 1. Credenciales y Archivos Sensibles (CRÍTICO - Ciberseguridad)
+.env
+.env.local
+.env.production
+.env.development
+.env.staging
+*.pem
+*.key
+*.p12
+*.pfx
+secrets.json
+supabase-keys.json
+
+# 2. Entornos Virtuales de Python (Backend)
+backend/venv/
+backend/.venv/
+backend/__pycache__/
+backend/*.pyc
+backend/.pytest_cache/
+
+# 3. Dependencias de Node (Aplicación Móvil y Web)
+node_modules/
+mobile/node_modules/
+web/node_modules/
+.npm/
+
+# 4. Compilaciones y Archivos Temporales de Mobile (React Native/Expo)
+mobile/.expo/
+mobile/android/
+mobile/ios/
+mobile/*.jks
+mobile/*.keystore
+mobile/npm-debug.log*
+mobile/yarn-error.log*
+
+# 5. Archivos del Sistema y Editores (Prevención de Filtrado)
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+Thumbs.db
+Desktop.ini
+.DS_Store
