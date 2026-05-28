@@ -3,29 +3,35 @@
    ========================================================== */
 
 :root {
-  /* Color Palette (HSL variables) */
-  --bg-dark: 224 71% 4%;       /* #020617 (Deep Slate) */
-  --bg-card: 222 47% 11%;      /* #0f172a (Slate 900) */
-  --bg-card-hover: 223 47% 16%;/* #1e293b (Slate 800) */
+  /* Color Palette (HSL variables - 6 Territorial Colors) */
+  --bg-dark: 207 49% 10%;       /* #0c1824 (Even deeper Prussian Dark Blue base) */
+  --bg-card: 207 49% 13%;      /* #14293A (Prussian Dark Blue for glass surfaces) */
+  --bg-card-hover: 207 49% 18%;/* Slightly lighter Prussian Blue */
   
   --text-main: 210 40% 98%;    /* #f8fafc (Almost White) */
   --text-muted: 215 20% 65%;   /* #94a3b8 (Slate 400) */
   --text-dark: 215 16% 47%;    /* #64748b (Slate 500) */
   
-  --primary: 199 89% 48%;      /* #0ea5e9 (Electric Cyan) */
-  --primary-glow: 199 89% 48% / 0.15;
-  --success: 142 71% 45%;      /* #10b981 (Emerald Green) */
-  --warning: 38 92% 50%;       /* #f59e0b (Amber Orange) */
-  --danger: 350 89% 60%;       /* #f43f5e (Rose Red) */
+  --primary: 207 100% 28%;     /* #00508F (Deep Ocean Blue for main elements) */
+  --primary-glow: 207 100% 28% / 0.25;
+  --secondary-sky: 207 100% 84%; /* #ADDBFF (Soft Sky Blue for telemetría / cyan highlights) */
   
-  --border-light: 217 32% 17% / 0.8;
-  --border-hover: 199 89% 48% / 0.4;
+  --success: 142 71% 45%;      /* #10b981 (Emerald Green) */
+  --warning: 36 100% 75%;      /* #FFCD82 (Soft Peach Sand for warnings/alerts) */
+  --danger: 350 89% 60%;       /* #f43f5e (Rose Red for emergencies) */
+  
+  /* Filter Materials (3D Visuals) */
+  --brown-earth: 36 55% 19%;   /* #4F3815 (Earthy Mud Brown) */
+  --brown-amber: 36 99% 28%;   /* #8F5601 (Amber Golden Brown) */
+  
+  --border-light: 207 100% 28% / 0.35;
+  --border-hover: 207 100% 84% / 0.5;
   
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
   --font-title: 'Outfit', system-ui, -apple-system, sans-serif;
   
-  --shadow-glow: 0 0 20px rgba(14, 165, 233, 0.15);
-  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(173, 219, 255, 0.15);
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
   
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -112,14 +118,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-primary {
-  background: hsl(var(--primary));
-  color: #000000;
+  background: hsl(var(--secondary-sky));
+  color: #0c1824;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 15px hsla(var(--primary) / 0.5);
-  background: hsl(199 89% 55%);
+  box-shadow: 0 0 15px rgba(173, 219, 255, 0.5);
+  background: #ffffff;
 }
 
 .btn-secondary {
