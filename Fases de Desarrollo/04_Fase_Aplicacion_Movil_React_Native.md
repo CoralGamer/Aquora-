@@ -284,6 +284,38 @@ Dado que los departamentos como La Guajira tienen zonas rurales con nula conecti
 
 ---
 
-## 5. Próximo Paso en el Ecosistema
+## 5. Alineación con el Sistema de Diseño de la Fase 3.5
+
+Para mantener la consistencia estética establecida en la **Fase 3.5 (Rediseño Visual)**, la aplicación React Native debe implementar los siguientes lineamientos visuales inspirados en el diseño premium *minimalist dark landscape*:
+
+### A. Estilo Global en React Native
+*   **Fondo Negro Absoluto:** Utilizar `backgroundColor: '#000000'` en el contenedor raíz para dar máxima profundidad.
+*   **Vidrio Traslúcido (Glassmorphism):** Usar páneles simulados con `backgroundColor: 'rgba(15, 23, 42, 0.75)'`, `borderWidth: 1`, y `borderColor: 'rgba(255, 255, 255, 0.08)'`.
+*   **Acentos de Umbral Carmesí:** Dibujar líneas de división de `1px` de altura con color `#f43f5e` para marcar umbrales de peligro sanitario o separadores sutiles de telemetría.
+
+### B. Estilo de las Tarjetas de Reporte Rápido
+Las tarjetas del módulo `QuickReportScreen.tsx` (Agua Limpia, Agua Turbia, Sin Agua, Filtro Averiado) deben configurarse con gradientes de fondo oscuros y tipografía bold para asegurar que la percepción visual en territorio sea idéntica a la del portal web:
+```tsx
+// Ejemplo de estilo de tarjeta alineado con Fase 3.5
+card: {
+  width: '47%',
+  height: 140,
+  borderRadius: 16,
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginBottom: 20,
+  backgroundColor: 'rgba(15, 23, 42, 0.85)',
+  borderWidth: 1,
+  borderColor: 'rgba(14, 165, 233, 0.2)', // Acento cian neón
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 10 },
+  shadowOpacity: 0.5,
+  shadowRadius: 10,
+}
+```
+
+---
+
+## 6. Próximo Paso en el Ecosistema
 
 Una vez armada la aplicación comunitaria y recolectados los reportes de calidad desde territorio, el sistema debe autogestionar umbrales críticos para disparar alertas inmediatas. Proceda a: **[Fase 5: Inteligencia Predictiva, Workflows y WhatsApp Bot](file:///E:/AQUORA/Fases%20de%20Desarrollo/05_Fase_Inteligencia_y_Automatizacion.md)**.
