@@ -53,28 +53,32 @@ export default function LandingPage({ onNavigate }) {
       title: 'Bagazo de Caña',
       subtitle: 'Adsorbente molecular orgánico',
       desc: 'Retiene compuestos químicos, plaguicidas, olores y metales pesados de forma pasiva mediante microporosidades celulósicas renovables.',
-      img: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=600&auto=format&fit=crop',
+      img: '/assets/card_bagazo.jpg',
+      fallback: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=600&auto=format&fit=crop',
     },
     {
       num: '02',
       title: 'Zeolita Activa',
       subtitle: 'Intercambio iónico a escala micro',
       desc: 'Atrapa selectivamente iones de metales pesados, neutraliza gérmenes, elimina el amoníaco y reduce significativamente la dureza del agua.',
-      img: 'https://images.unsplash.com/photo-1518152006812-cdab29b069a8?q=80&w=600&auto=format&fit=crop',
+      img: '/assets/card_zeolita.jpg',
+      fallback: 'https://img.lalr.co/cms/2015/07/09125829/zeolita0626-000.jpg',
     },
     {
       num: '03',
       title: 'Arena Silícea',
       subtitle: 'Filtración mecánica primaria',
       desc: 'Retiene los sedimentos gruesos, partículas suspendidas y lodo, garantizando la claridad física antes de las fases microbacterianas.',
-      img: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=600&auto=format&fit=crop',
+      img: '/assets/card_arena.jpg',
+      fallback: 'https://tierrasupplyco.com/cdn/shop/files/9D21B002-5856-4D91-BE4A-2D13B08F7D2D.jpg?v=1775305785&width=1946',
     },
     {
       num: '04',
       title: 'Telemetría ESP32',
       subtitle: 'Inteligencia y monitoreo continuo',
       desc: 'Mide TDS, claridad y nivel en tiempo real. Envía alertas de mantenimiento y opera de forma offline en áreas remotas sin cobertura.',
-      img: 'https://images.unsplash.com/photo-1601524909162-be87252be298?q=80&w=600&auto=format&fit=crop',
+      img: '/assets/card_telemetria.jpg',
+      fallback: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=600&auto=format&fit=crop',
     },
   ];
 
@@ -569,13 +573,22 @@ export default function LandingPage({ onNavigate }) {
               }}
             >
               {/* Background Image */}
-              <div style={{
-                position: 'absolute',
-                inset: 0,
-                backgroundImage: `url(${card.img})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-              }} />
+              <img 
+                src={card.img}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = card.fallback;
+                }}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  transition: 'var(--transition)',
+                }}
+                alt={card.title}
+              />
 
               {/* Darker Overlay at bottom */}
               <div style={{
