@@ -170,104 +170,81 @@ export default function App() {
               }
             }}
           >
-            💧 AQUORA
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0L12 2.69z" fill="currentColor" opacity="0.85"/>
+            </svg>
+            AQUORA
           </a>
           
           <nav className="nav-links">
             {!session ? (
-              // Navigation for guests
               <>
                 <button 
-                  className={`nav-link btn-secondary ${activeTab === "landing" ? "active" : ""}`}
+                  className={`nav-link ${activeTab === "landing" ? "active" : ""}`}
                   onClick={() => setActiveTab("landing")}
-                  style={{ padding: "0.5rem 1rem", border: "none", cursor: "pointer", background: "none" }}
                 >
-                  🌱 Impacto
+                  Impacto
                 </button>
                 <button 
-                  className={`nav-link btn-secondary ${activeTab === "docs" ? "active" : ""}`}
+                  className={`nav-link ${activeTab === "docs" ? "active" : ""}`}
                   onClick={() => setActiveTab("docs")}
-                  style={{ padding: "0.5rem 1rem", border: "none", cursor: "pointer", background: "none" }}
                 >
-                  📖 Open Source Firmware
+                  Firmware
                 </button>
                 <button 
-                  className={`nav-link btn-secondary ${activeTab === "login" ? "active" : ""}`}
+                  className={`nav-link-cta ${activeTab === "login" ? "active" : ""}`}
                   onClick={() => setActiveTab("login")}
-                  style={{ 
-                    padding: "0.5rem 1.25rem", 
-                    borderRadius: "10px",
-                    border: "1px solid hsla(var(--primary) / 0.4)",
-                    color: "hsl(var(--primary))",
-                    cursor: "pointer", 
-                    background: "rgba(14, 165, 233, 0.05)",
-                    fontWeight: "bold"
-                  }}
                 >
-                  🔑 Iniciar Sesión
+                  Iniciar Sesión
                 </button>
               </>
             ) : (
-              // Navigation for authenticated users
               <>
                 {userProfile?.role === "admin" ? (
-                  // Admin links
                   <>
                     <button 
-                      className={`nav-link btn-secondary ${activeTab === "dashboard" ? "active" : ""}`}
+                      className={`nav-link ${activeTab === "dashboard" ? "active" : ""}`}
                       onClick={() => setActiveTab("dashboard")}
-                      style={{ padding: "0.5rem 1rem", border: "none", cursor: "pointer", background: "none" }}
                     >
-                      📊 Centro Analítico
+                      Centro Analítico
                     </button>
                     <button 
-                      className={`nav-link btn-secondary ${activeTab === "filter3d" ? "active" : ""}`}
+                      className={`nav-link ${activeTab === "filter3d" ? "active" : ""}`}
                       onClick={() => setActiveTab("filter3d")}
-                      style={{ padding: "0.5rem 1rem", border: "none", cursor: "pointer", background: "none" }}
                     >
-                      🛠️ Explora el Filtro 3D
+                      Filtro 3D
                     </button>
                     <button 
-                      className={`nav-link btn-secondary ${activeTab === "provisioning" ? "active" : ""}`}
+                      className={`nav-link ${activeTab === "provisioning" ? "active" : ""}`}
                       onClick={() => setActiveTab("provisioning")}
-                      style={{ padding: "0.5rem 1rem", border: "none", cursor: "pointer", background: "none" }}
                     >
-                      👥 Aprovisionamiento
+                      Aprovisionamiento
                     </button>
                   </>
                 ) : (
-                  // Community member links
                   <>
                     <button 
-                      className={`nav-link btn-secondary ${activeTab === "member_dashboard" ? "active" : ""}`}
+                      className={`nav-link ${activeTab === "member_dashboard" ? "active" : ""}`}
                       onClick={() => setActiveTab("member_dashboard")}
-                      style={{ padding: "0.5rem 1rem", border: "none", cursor: "pointer", background: "none" }}
                     >
-                      📊 Mi Filtro
+                      Mi Filtro
                     </button>
                   </>
                 )}
                 
                 <button 
-                  className={`nav-link btn-secondary ${activeTab === "profile" ? "active" : ""}`}
+                  className={`nav-link ${activeTab === "profile" ? "active" : ""}`}
                   onClick={() => setActiveTab("profile")}
-                  style={{ padding: "0.5rem 1rem", border: "none", cursor: "pointer", background: "none" }}
                 >
-                  👤 Mi Perfil
+                  Perfil
                 </button>
 
                 <button 
-                  className="nav-link btn-secondary"
+                  className="nav-link"
                   onClick={handleLogout}
-                  style={{ 
-                    padding: "0.5rem 1rem", 
-                    border: "none", 
-                    cursor: "pointer", 
-                    background: "none",
-                    color: "hsl(var(--danger))" 
-                  }}
+                  style={{ color: "hsl(var(--danger))" }}
                 >
-                  🚪 Salir
+                  Salir
                 </button>
               </>
             )}
@@ -276,7 +253,7 @@ export default function App() {
       </header>
 
       {/* Main Body */}
-      <main className="container" style={{ flex: 1, padding: "2.5rem 2rem", display: "flex", flexDirection: "column", gap: "2.5rem" }}>
+      <main className="container" style={{ flex: 1, padding: "clamp(1.25rem, 3vw, 2.5rem) 0", display: "flex", flexDirection: "column", gap: "clamp(1.5rem, 3vw, 2.5rem)" }}>
         
         {loadingProfile ? (
           <div className="card" style={{ padding: "4rem", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
@@ -311,28 +288,27 @@ export default function App() {
                 {userProfile?.role === "admin" && (
                   <>
                     {activeTab === "dashboard" && (
-                      <div style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-lg)" }}>
                         {/* Summary Branding */}
-                        <div className="card" style={{ 
-                          background: "linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.7) 100%)",
-                          padding: "2rem",
+                        <div className="card-static" style={{ 
+                          padding: "var(--space-lg)",
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
                           flexWrap: "wrap",
-                          gap: "1.5rem"
+                          gap: "var(--space-md)"
                         }}>
                           <div>
-                            <h1 style={{ fontFamily: "var(--font-title)", fontSize: "2.25rem", color: "hsl(var(--text-main))", marginBottom: "0.5rem" }}>
+                            <h1 style={{ fontFamily: "var(--font-display)", fontSize: "2rem", color: "hsl(var(--text-primary))", marginBottom: "0.5rem" }}>
                               Monitoreo Inteligente y Salud Comunitaria
                             </h1>
-                            <p style={{ color: "hsl(var(--text-muted))", fontSize: "1.05rem", maxWidth: "800px", lineHeight: "1.5" }}>
+                            <p style={{ color: "hsl(var(--text-secondary))", fontSize: "1rem", maxWidth: "800px", lineHeight: "1.6" }}>
                               Panel de control para administradores de la Fundación Ábaco. Visualiza parámetros hídricos de La Guajira, analiza el riesgo de Enfermedades Diarreicas Agudas (EDA) y gestiona los dispositivos comunitarios.
                             </p>
                           </div>
-                          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", background: "rgba(16, 185, 129, 0.08)", padding: "0.5rem 1rem", borderRadius: "30px", border: "1px solid rgba(16, 185, 129, 0.2)" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", background: "hsla(var(--success) / 0.06)", padding: "0.4rem 0.875rem", borderRadius: "var(--radius-sm)", border: "1px solid hsla(var(--success) / 0.15)" }}>
                             <span className="pulse-indicator"></span>
-                            <span style={{ fontSize: "0.85rem", color: "hsl(var(--success))", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                            <span className="section-label" style={{ color: "hsl(var(--success))", letterSpacing: "0.08em" }}>
                               Telemetría Activa
                             </span>
                           </div>
@@ -345,53 +321,53 @@ export default function App() {
                             selectedCommunityId={selectedCommunityId} 
                           />
                           
-                          <div className="card" style={{ display: "flex", flexDirection: "column", gap: "1.5rem", justifyContent: "space-between" }}>
+                          <div className="card-static" style={{ display: "flex", flexDirection: "column", gap: "var(--space-md)", justifyContent: "space-between" }}>
                             <div>
-                              <h3 style={{ fontFamily: "var(--font-title)", fontSize: "1.35rem", color: "hsl(var(--text-main))", borderBottom: "1px solid hsl(var(--border-light))", paddingBottom: "0.75rem", marginBottom: "1rem" }}>
-                                ℹ️ Comunidad Seleccionada: <span style={{ color: "hsl(var(--primary))" }}>{selectedCommunityName || "Ninguna seleccionada"}</span>
+                              <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.2rem", color: "hsl(var(--text-primary))", borderBottom: "1px solid hsl(var(--border))", paddingBottom: "0.75rem", marginBottom: "1rem" }}>
+                                Comunidad: <span style={{ color: "hsl(var(--sky))" }}>{selectedCommunityName || "Ninguna seleccionada"}</span>
                               </h3>
                               
                               {selectedCommunityId ? (
-                                <div style={{ display: "flex", flexDirection: "column", gap: "1rem", fontSize: "0.95rem" }}>
-                                  <p style={{ color: "hsl(var(--text-muted))", lineHeight: "1.5" }}>
+                                <div style={{ display: "flex", flexDirection: "column", gap: "1rem", fontSize: "0.9rem" }}>
+                                  <p style={{ color: "hsl(var(--text-secondary))", lineHeight: "1.6" }}>
                                     Esta comunidad cuenta con un filtro purificador ecológico <strong>AQUORA</strong> equipado con telemetría IoT activa. El mapa calcula dinámicamente su índice de riesgo basándose en el voltaje de los sensores y reportes históricos de EDA.
                                   </p>
                                   
-                                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginTop: "0.5rem" }}>
-                                    <div style={{ background: "rgba(0,0,0,0.18)", padding: "0.75rem 1rem", borderRadius: "10px", border: "1px solid hsl(var(--border-light))" }}>
-                                      <span style={{ fontSize: "0.75rem", color: "hsl(var(--text-dark))", textTransform: "uppercase", fontWeight: "bold" }}>Último TDS</span>
-                                      <div style={{ fontSize: "1.25rem", fontWeight: "bold", color: "hsl(var(--primary))", marginTop: "0.25rem" }}>
+                                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.875rem", marginTop: "0.5rem" }}>
+                                    <div style={{ background: "hsla(var(--bg-base) / 0.5)", padding: "0.75rem 1rem", borderRadius: "var(--radius-sm)", border: "1px solid hsl(var(--border))" }}>
+                                      <span className="section-label" style={{ color: "hsl(var(--text-dim))" }}>Último TDS</span>
+                                      <div style={{ fontSize: "1.25rem", fontWeight: "bold", color: "hsl(var(--ocean))", marginTop: "0.25rem", fontFamily: "var(--font-label)" }}>
                                         {historyData[historyData.length - 1]?.tds?.toFixed(1) || "N/A"} ppm
                                       </div>
                                     </div>
-                                    <div style={{ background: "rgba(0,0,0,0.18)", padding: "0.75rem 1rem", borderRadius: "10px", border: "1px solid hsl(var(--border-light))" }}>
-                                      <span style={{ fontSize: "0.75rem", color: "hsl(var(--text-dark))", textTransform: "uppercase", fontWeight: "bold" }}>Nivel Tanque</span>
-                                      <div style={{ fontSize: "1.25rem", fontWeight: "bold", color: "hsl(var(--success))", marginTop: "0.25rem" }}>
+                                    <div style={{ background: "hsla(var(--bg-base) / 0.5)", padding: "0.75rem 1rem", borderRadius: "var(--radius-sm)", border: "1px solid hsl(var(--border))" }}>
+                                      <span className="section-label" style={{ color: "hsl(var(--text-dim))" }}>Nivel Tanque</span>
+                                      <div style={{ fontSize: "1.25rem", fontWeight: "bold", color: "hsl(var(--success))", marginTop: "0.25rem", fontFamily: "var(--font-label)" }}>
                                         {historyData[historyData.length - 1]?.level?.toFixed(1) || "N/A"}%
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               ) : (
-                                <p style={{ color: "hsl(var(--text-muted))" }}>Selecciona un nodo en el mapa interactivo para cargar información histórica de campo.</p>
+                                <p style={{ color: "hsl(var(--text-secondary))" }}>Selecciona un nodo en el mapa interactivo para cargar información histórica de campo.</p>
                               )}
                             </div>
                             
                             <div style={{ 
-                              background: "rgba(14, 165, 233, 0.04)", 
-                              border: "1px solid hsla(var(--primary) / 0.1)", 
+                              background: "hsla(var(--ocean) / 0.04)", 
+                              border: "1px solid hsla(var(--ocean) / 0.1)", 
                               padding: "1.25rem", 
-                              borderRadius: "12px", 
+                              borderRadius: "var(--radius-md)", 
                               display: "flex", 
                               flexDirection: "column", 
                               gap: "0.75rem" 
                             }}>
                               <div>
-                                <h4 style={{ fontFamily: "var(--font-title)", fontSize: "1rem", color: "hsl(var(--text-main))" }}>
-                                  🛠️ ¿Cómo funciona el filtro físico?
+                                <h4 style={{ fontFamily: "var(--font-label)", fontSize: "0.95rem", color: "hsl(var(--text-primary))" }}>
+                                  Filtro Físico por Capas
                                 </h4>
-                                <p style={{ color: "hsl(var(--text-muted))", fontSize: "0.85rem", marginTop: "0.25rem", lineHeight: "1.4" }}>
-                                  Hemos diseñado una cámara de filtrado biológico por capas. Zeolita activa, bagazo de caña y arena silícea eliminan bacterias, metales y sólidos suspendidos de forma pasiva.
+                                <p style={{ color: "hsl(var(--text-secondary))", fontSize: "0.82rem", marginTop: "0.25rem", lineHeight: "1.5" }}>
+                                  Zeolita activa, bagazo de caña y arena silícea eliminan bacterias, metales y sólidos suspendidos de forma pasiva.
                                 </p>
                               </div>
                               <button 
@@ -399,7 +375,7 @@ export default function App() {
                                 onClick={() => setActiveTab("filter3d")}
                                 style={{ width: "100%", padding: "0.6rem 1rem", fontSize: "0.85rem" }}
                               >
-                                Abrir Visor del Filtro 3D ➔
+                                Abrir Visor del Filtro 3D
                               </button>
                             </div>
                           </div>
@@ -417,7 +393,7 @@ export default function App() {
                               backdropFilter: "blur(2px)",
                               borderRadius: "16px"
                             }}>
-                              <p style={{ color: "hsl(var(--primary))", fontWeight: "bold" }}>Sincronizando curvas analíticas...</p>
+                              <p style={{ color: "hsl(var(--sky))", fontWeight: "600", fontFamily: "var(--font-label)", fontSize: "0.875rem" }}>Sincronizando curvas analíticas...</p>
                             </div>
                           )}
                           <TelemetryCharts data={historyData} />
@@ -426,13 +402,13 @@ export default function App() {
                     )}
 
                     {activeTab === "filter3d" && (
-                      <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-md)" }}>
                         <button 
                           className="btn btn-secondary" 
                           onClick={() => setActiveTab("dashboard")}
                           style={{ alignSelf: "flex-start", padding: "0.5rem 1rem", fontSize: "0.85rem" }}
                         >
-                          ⬅️ Volver al Centro Analítico
+                          Volver al Centro Analítico
                         </button>
                         <FilterViewer3D />
                       </div>
@@ -464,10 +440,92 @@ export default function App() {
 
       </main>
 
-      {/* Footer */}
-      <footer style={{ borderTop: "1px solid hsl(var(--border-light))", padding: "1.5rem 0", background: "rgba(2, 6, 23, 0.9)", textAlign: "center", fontSize: "0.85rem", color: "hsl(var(--text-dark))" }}>
+      {/* Footer Premium — Editorial & Legal */}
+      <footer className="footer-main">
         <div className="container">
-          <p>© {new Date().getFullYear()} AQUORA. Proyecto Abierto bajo Licencia MIT. Desarrollado para la Fundación Ábaco e Inteligencia Territorial.</p>
+          <div className="footer-grid">
+            
+            {/* Columna 1: Branding y Propósito */}
+            <div className="footer-col">
+              <a 
+                href="#" 
+                className="footer-logo"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setActiveTab(session ? (userProfile?.role === "admin" ? "dashboard" : "member_dashboard") : "landing");
+                }}
+              >
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "24px", height: "24px", fill: "hsl(var(--sky))", marginRight: "0.25rem" }}>
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0L12 2.69z" fill="currentColor" opacity="0.85"/>
+                </svg>
+                AQUORA
+              </a>
+              <p className="footer-col-text">
+                Plataforma de inteligencia territorial hídrica descentralizada. Monitoreo predictivo y telemetría de calidad del agua para salvaguardar la salud de las comunidades en La Guajira, Colombia.
+              </p>
+              <div className="footer-legal-badge">
+                <span className="pulse-indicator" style={{ backgroundColor: "hsl(var(--peach))", width: "8px", height: "8px" }}></span>
+                Cumplimiento Ley 1581 de 2012
+              </div>
+            </div>
+
+            {/* Columna 2: Red de Misiones ABACO */}
+            <div className="footer-col">
+              <h4 className="footer-col-title">Red de Bancos de Alimentos (ABACO)</h4>
+              <div className="footer-missions-container">
+                <a href="https://abaco.org.co/" target="_blank" rel="noopener noreferrer" className="btn-mission">
+                  <span>ABACO Nacional</span>
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ width: "14px", height: "14px", fill: "currentColor" }}><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z"/></svg>
+                </a>
+                <a href="https://www.bancodealimentos.org.co/" target="_blank" rel="noopener noreferrer" className="btn-mission">
+                  <span>Banco de Alimentos Bogotá</span>
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ width: "14px", height: "14px", fill: "currentColor" }}><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z"/></svg>
+                </a>
+                <a href="https://www.bancodealimentosmed.org/" target="_blank" rel="noopener noreferrer" className="btn-mission">
+                  <span>Banco de Alimentos Medellín</span>
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ width: "14px", height: "14px", fill: "currentColor" }}><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z"/></svg>
+                </a>
+                <a href="https://www.bancodealimentoscali.org/" target="_blank" rel="noopener noreferrer" className="btn-mission">
+                  <span>Banco de Alimentos Cali</span>
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ width: "14px", height: "14px", fill: "currentColor" }}><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z"/></svg>
+                </a>
+              </div>
+            </div>
+
+            {/* Columna 3: Información Legal & Habeas Data */}
+            <div className="footer-col">
+              <h4 className="footer-col-title">Tratamiento de Datos y Legal</h4>
+              <p className="footer-col-text" style={{ fontSize: "0.85rem", opacity: 0.85 }}>
+                En concordancia con la <strong>Ley 1581 de 2012</strong> (Régimen de Protección de Datos Personales en Colombia) y el <strong>Decreto 1377 de 2013</strong>, la recolección, almacenamiento y procesamiento de los reportes y telemetría cumple con los principios de finalidad, confidencialidad, libertad y veracidad de la información de las comunidades rurales.
+              </p>
+              <ul className="footer-links-list">
+                <li className="footer-link-item">
+                  <a href="#" onClick={(e) => { e.preventDefault(); alert("Autorización de Habeas Data:\n\nAl navegar y hacer uso de los paneles de telemetría de AQUORA, usted acepta de manera previa, expresa e informada que sus datos de sensor y reportes sanitarios de campo sean tratados por la Asociación de Bancos de Alimentos de Colombia (ABACO) únicamente para fines de monitoreo de agua cruda y prevención de brotes de EDA bajo la Ley colombiana 1581 de 2012."); }}>
+                    ⚖️ Autorización Habeas Data
+                  </a>
+                </li>
+                <li className="footer-link-item">
+                  <a href="#" onClick={(e) => { e.preventDefault(); alert("Política de Privacidad y Tratamiento de Datos:\n\nEn AQUORA nos tomamos muy en serio la seguridad de la información. El acceso a los identificadores de dispositivos y números de contacto comunitario en La Guajira está estrictamente encriptado y restringido a los administradores autorizados de la red ABACO de Colombia."); }}>
+                    🔒 Política de Privacidad
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+
+          {/* Fila Inferior */}
+          <div className="footer-bottom">
+            <div className="footer-bottom-text">
+              <strong>AQUORA</strong> — Proyecto de Código Abierto bajo Licencia MIT.<br />
+              Co-desarrollado para la <strong>Asociación de Bancos de Alimentos de Colombia (ABACO)</strong> e Inteligencia Territorial en Colombia.
+            </div>
+            <div className="footer-bottom-links">
+              <span style={{ color: "hsl(var(--text-dim))" }}>© {new Date().getFullYear()}</span>
+              <a href="https://abaco.org.co/" target="_blank" rel="noopener noreferrer" className="footer-bottom-link">ABACO</a>
+              <a href="#" onClick={(e) => { e.preventDefault(); setActiveTab("docs"); }} className="footer-bottom-link">Soporte Firmware</a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
