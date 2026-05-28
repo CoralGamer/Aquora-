@@ -9,32 +9,43 @@ export default function LandingPage({ onNavigate }) {
       label: 'El Jagüey',
       title: 'La Crisis del Agua de Jagüey',
       desc: 'Las comunidades Wayúu dependen de pozos de agua cruda expuestos (jagüeyes) compartidos con la fauna local, acumulando sedimentos gruesos, parásitos y bacterias letales para el organismo infantil.',
+      img: '/assets/slide_jaguey.jpg',
+      fallback: 'https://images.unsplash.com/photo-1571401835393-8c5f35328320?q=80&w=1200'
     },
     {
       num: '02',
       label: 'Brote de EDA',
       title: 'El Nexo con las Enfermedades Diarreicas',
       desc: 'Las constantes infecciones estomacales (EDA) causan inflamación e impiden la absorción de los nutrientes. Proveer agua segura es el paso indispensable antes de nutrir.',
+      img: '/assets/slide_eda.jpg',
+      fallback: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1200'
     },
     {
       num: '03',
       label: 'Filtro Orgánico',
       title: 'Purificación Ecológica por Capas',
       desc: 'Un sistema pasivo descentralizado de filtración por gravedad que purifica el agua utilizando zeolita activa (intercambio iónico), bagazo de caña de azúcar (adsorción de metales) y arena silícea.',
+      img: '/assets/slide_filtro.jpg',
+      fallback: 'https://images.unsplash.com/photo-1601524909162-be87252be298?q=80&w=1200'
     },
     {
       num: '04',
       label: 'Telemetría IoT',
       title: 'Vigilancia Sanitaria Activa en Tiempo Real',
       desc: 'Sensores de TDS, turbidez y volumen con un microcontrolador ESP32 transmiten datos en vivo a la nube para mapear el riesgo sanitario de forma predictiva mediante modelos de IA.',
+      img: '/assets/slide_telemetria.jpg',
+      fallback: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200'
     },
     {
       num: '05',
       label: 'Escalabilidad',
       title: 'Arquitectura Modular para el Territorio Expandido',
       desc: 'Nuestra arquitectura modular está diseñada para escalar exponencialmente. El cerebro electrónico del ESP32 y sus sensores analógicos pueden acoplarse no solo a jagüeyes, sino también a sistemas de captación de agua de lluvia, pozos profundos artesanales, tomas de acueductos veredales y tanques de distribución. Adaptamos dinámicamente los umbrales a cualquier tipología de fuente hídrica.',
+      img: '/assets/slide_escalabilidad.jpg',
+      fallback: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200'
     },
   ];
+
 
   const cards = [
     {
@@ -66,8 +77,6 @@ export default function LandingPage({ onNavigate }) {
       img: 'https://images.unsplash.com/photo-1601524909162-be87252be298?q=80&w=600&auto=format&fit=crop',
     },
   ];
-
-  const heroImageUrl = 'https://images.unsplash.com/photo-1571401835393-8c5f35328320?q=80&w=1200';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -183,13 +192,23 @@ export default function LandingPage({ onNavigate }) {
           overflow: 'hidden',
         }}>
           {/* The landscape photo */}
-          <div style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage: `url(${heroImageUrl})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }} />
+          <img 
+            key={activeSlide}
+            src={slides[activeSlide].img}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = slides[activeSlide].fallback;
+            }}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              transition: 'all 0.5s ease-in-out',
+            }}
+            alt={slides[activeSlide].title}
+          />
           {/* Left-side gradient mask that blends into the bg */}
           <div style={{
             position: 'absolute',
