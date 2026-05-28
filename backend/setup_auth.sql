@@ -67,4 +67,4 @@ CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
-print('--> SQL Script generated successfully. You can now execute this in your Supabase SQL Editor.');
+-- SQL Script generated successfully. You can now execute this in your Supabase SQL Editor.
