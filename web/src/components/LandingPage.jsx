@@ -750,7 +750,7 @@ export default function LandingPage({ onNavigate }) {
           }}>
             {/* Android Download Button */}
             <a 
-              href="https://github.com/CoralGamer/SerendipIA---Creathon-Ignia/raw/main/mobile/builds/aquora-comunidad.apk" 
+              href="https://github.com/CoralGamer/Aquora-/raw/main/mobile/builds/aquora-comunidad.apk" 
               className="btn btn-primary"
               style={{
                 padding: '1rem 1.5rem',
@@ -766,7 +766,7 @@ export default function LandingPage({ onNavigate }) {
               }}
             >
               <svg viewBox="0 0 24 24" style={{ width: '24px', height: '24px', fill: 'currentColor' }}>
-                <path d="M4.19 14.88c-.6-.18-1-.73-1-1.38V9.5c0-.65.4-1.2 1-1.38V14.88zM20.81 8.12c.6.18 1 .73 1 1.38v4c0 .65-.4 1.2-1 1.38V8.12zM7 16h10v1c0 .55-.45 1-1 1h-8c-.55 0-1-.45-1-1v-1zm4.84-11.83c-.31-.41-.85-.5-1.26-.19a.9.9 0 0 0-.19 1.26l1.35 1.76H7c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h10c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1h-4.74l1.35-1.76c.31-.41.22-.95-.19-1.26a.91.91 0 0 0-.58-.08zm.16 5.83c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-4 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
+                <path d="M6 18c0 .55.45 1 1 1h1v3c0 .55.45 1 1 1s1-.45 1-1v-3h4v3c0 .55.45 1 1 1s1-.45 1-1v-3h1c.55 0 1-.45 1-1V8H6v10zM19 5.01a1 1 0 0 0-1-1h-1.63L18 2.37a1.001 1.001 0 0 0-1.73-1l-1.89 3.27C13.43 4.22 12.73 4 12 4c-.73 0-1.43.22-2.38.64L7.73 1.37a1.001 1.001 0 0 0-1.73 1L7.63 4H6c-.55 0-1 .45-1 1v2h14v-1.99zM9 10c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm6 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zM2 9c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1s1-.45 1-1v-4c0-.55-.45-1-1-1zm20 0c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1s1-.45 1-1v-4c0-.55-.45-1-1-1z" />
               </svg>
               <div style={{ textAlign: 'left' }}>
                 <span style={{ fontSize: '0.75rem', opacity: 0.8, display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Disponible para Android</span>

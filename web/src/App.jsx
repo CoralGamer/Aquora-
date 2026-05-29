@@ -331,7 +331,7 @@ export default function App() {
             }}
             style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
           >
-            <img src="/favicon.svg" alt="AQUORA Logo" style={{ width: "28px", height: "28px", objectFit: "contain" }} />
+            <img src="./favicon.svg" alt="AQUORA Logo" style={{ width: "28px", height: "28px", objectFit: "contain" }} />
             AQUORA
           </a>
           
@@ -842,7 +842,7 @@ export default function App() {
                 }}
                 style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}
               >
-                <img src="/favicon.svg" alt="AQUORA Logo" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <img src="./favicon.svg" alt="AQUORA Logo" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
                 AQUORA
               </a>
               <p className="footer-col-text">
@@ -864,7 +864,7 @@ export default function App() {
                 </span>
                 <div style={{ display: "flex", gap: "0.5rem" }}>
                   <a 
-                    href="https://github.com/CoralGamer/SerendipIA---Creathon-Ignia/raw/main/mobile/builds/aquora-comunidad.apk"
+                    href="https://github.com/CoralGamer/Aquora-/raw/main/mobile/builds/aquora-comunidad.apk"
                     style={{ fontSize: "0.75rem", color: "hsl(var(--peach))", fontWeight: "bold" }}
                   >
                     Descargar APK (Android)
