@@ -860,7 +860,7 @@ export default function App() {
                   📱 Aplicación Comunitaria
                 </span>
                 <span style={{ fontSize: "0.78rem", color: "hsl(var(--text-secondary))", display: "block", marginBottom: "0.5rem" }}>
-                  Nuestra aplicación móvil está disponible para Android y iOS. ¡Descárgala ya!
+                  Nuestra aplicación móvil está disponible para Android. ¡Descárgala ya!
                 </span>
                 <div style={{ display: "flex", gap: "0.5rem" }}>
                   <a 
@@ -868,17 +868,6 @@ export default function App() {
                     style={{ fontSize: "0.75rem", color: "hsl(var(--peach))", fontWeight: "bold" }}
                   >
                     Descargar APK (Android)
-                  </a>
-                  <span style={{ color: "rgba(255,255,255,0.2)", fontSize: "0.75rem" }}>|</span>
-                  <a 
-                    href="#" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      alert("Instalación de iOS:\n\nEl instalador corporativo iOS (.ipa) para el piloto comunal de AQUORA puede descargarse desde la carpeta /mobile/builds/ en el repositorio. Para instalar en dispositivos Apple en fase de pruebas:\n\n1. Registre el UUID de su dispositivo en la consola de Apple Developer.\n2. Instale mediante Cydia Impactor o Xcode.");
-                    }}
-                    style={{ fontSize: "0.75rem", color: "hsl(var(--sky))", fontWeight: "bold" }}
-                  >
-                    Descargar IPA (iOS)
                   </a>
                 </div>
               </div>

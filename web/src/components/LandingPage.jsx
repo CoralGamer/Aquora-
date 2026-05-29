@@ -714,7 +714,7 @@ export default function LandingPage({ onNavigate }) {
               letterSpacing: '-0.02em',
               marginBottom: '1rem'
             }}>
-              Descarga nuestra app, disponible en Android y iOS
+              Descarga nuestra app, disponible en Android
             </h2>
             <p style={{
               fontFamily: 'var(--font-ui)',
@@ -762,43 +762,16 @@ export default function LandingPage({ onNavigate }) {
                 borderRadius: 'var(--radius-md)',
                 backgroundColor: 'hsl(var(--ocean))',
                 borderColor: 'hsl(var(--ocean))',
-                textDecoration: 'none'
+                textDecoration: 'none',
+                width: '100%'
               }}
             >
-              <svg viewBox="0 0 24 24" style={{ width: '24px', height: '24px', fill: 'currentColor' }}>
-                <path d="M16.6 14c-.52 0-.95-.43-.95-.95 0-.52.43-.95.95-.95.52 0 .95.43.95.95 0 .52-.43.95-.95.95m-9.2 0c-.52 0-.95-.43-.95-.95 0-.52.43-.95.95-.95.52 0 .95.43.95.95 0 .52-.43.95-.95.95M12 5.01c2.41 0 4.47 1.48 5.37 3.57H6.63C7.53 6.49 9.59 5.01 12 5.01m7.42 3.58C19.78 8.1 20 7.57 20 7s-.22-1.1-.63-1.52l1.37-1.37a.996.996 0 1 0-1.41-1.41l-1.37 1.37C16.48 3.39 14.34 3 12 3s-4.48.39-5.96 1.08L4.67 2.7a.996.996 0 1 0-1.41 1.41l1.37 1.37C4.22 5.9 4 6.43 4 7s.22 1.1.63 1.52c-.6.18-1 .73-1 1.38v6c0 .83.67 1.5 1.5 1.5h1.22c.4 1.14 1.48 1.95 2.76 1.95v2c0 .55.45 1 1 1s1-.45 1-1v-2h2v2c0 .55.45 1 1 1s1-.45 1-1v-2c1.28 0 2.36-.81 2.76-1.95h1.22c.83 0 1.5-.67 1.5-1.5v-6c0-.65-.4-1.2-1-1.38z" />
+              <svg viewBox="0 0 576 512" style={{ width: '24px', height: '24px', fill: 'currentColor' }}>
+                <path d="M420.55 301.93a24 24 0 1 1 24-24 24 24 0 0 1-24 24m-265.1 0a24 24 0 1 1 24-24 24 24 0 0 1-24 24m288.7-142c-20-33.15-54.82-56.55-96.65-61l26-45a12 12 0 1 0-20.78-12l-26.78 46.36c-27.17-5.59-56.12-8.32-86.24-8.32s-59.07 2.73-86.24 8.32L167.46 32a12 12 0 1 0-20.78 12l26 45c-41.83 4.45-76.65 27.85-96.65 61a148.66 148.66 0 0 0-20 73.07h400a148.66 148.66 0 0 0-20-73.07m-351.5 98.07H36a16 16 0 0 0-16 16v96a16 16 0 0 0 16 16h56a16 16 0 0 0 16-16v-96a16 16 0 0 0-16-16m448 0h-56a16 16 0 0 0-16 16v96a16 16 0 0 0 16 16h56a16 16 0 0 0 16-16v-96a16 16 0 0 0-16-16M108 288h360v120c0 26.51-21.49 48-48 48H156c-26.51 0-48-21.49-48-48zm48 176v32c0 8.84 7.16 16 16 16h24c8.84 0 16-7.16 16-16v-32zm160 0v32c0 8.84 7.16 16 16 16h24c8.84 0 16-7.16 16-16v-32z" />
               </svg>
               <div style={{ textAlign: 'left' }}>
                 <span style={{ fontSize: '0.75rem', opacity: 0.8, display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Disponible para Android</span>
                 <span style={{ fontWeight: 'bold', fontSize: '1.05rem' }}>Descargar APK (.apk)</span>
-              </div>
-            </a>
-
-            {/* iOS Download Button */}
-            <a 
-              href="#" 
-              onClick={(e) => {
-                e.preventDefault();
-                alert("Instalación de iOS:\n\nEl instalador corporativo iOS (.ipa) para el piloto comunal de AQUORA puede descargarse desde la carpeta /mobile/builds/ en el repositorio. Para instalar en dispositivos Apple en fase de pruebas:\n\n1. Registre el UUID de su dispositivo en la consola de Apple Developer.\n2. Instale mediante Cydia Impactor o Xcode.");
-              }}
-              className="btn btn-secondary"
-              style={{
-                padding: '1rem 1.5rem',
-                fontSize: '1rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.75rem',
-                borderRadius: 'var(--radius-md)',
-                textDecoration: 'none'
-              }}
-            >
-              <svg viewBox="0 0 24 24" style={{ width: '24px', height: '24px', fill: 'currentColor' }}>
-                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-.96.04-2.13.64-2.82 1.45-.6.68-1.12 1.82-.98 2.92.1.08.2.12.3.12.87 0 1.97-.57 2.51-1.43z" />
-              </svg>
-              <div style={{ textAlign: 'left' }}>
-                <span style={{ fontSize: '0.75rem', opacity: 0.8, display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Disponible para iOS</span>
-                <span style={{ fontWeight: 'bold', fontSize: '1.05rem' }}>Descargar iOS (.ipa)</span>
               </div>
             </a>
           </div>
