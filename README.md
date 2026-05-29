@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/Backend-FastAPI%20--%20Supabase-red.svg?style=for-the-badge&logo=fastapi" alt="Backend FastAPI">
   <img src="https://img.shields.io/badge/Web-React%2018%20--%20Vite-blue.svg?style=for-the-badge&logo=react" alt="Web React">
   <img src="https://img.shields.io/badge/Mobile-React%20Native%20--%20Expo-lightblue.svg?style=for-the-badge&logo=react" alt="Mobile React Native">
-  <img src="https://img.shields.io/badge/License-MIT-gold.svg?style=for-the-badge" alt="License MIT">
+  <img src="https://img.shields.io/badge/Licencia-Comercial%20Restringida-red.svg?style=for-the-badge" alt="Licencia Comercial Restringida">
 </p>
 
 ---
@@ -43,7 +43,7 @@ AQUORA elimina la "ceguera" institucional respecto a la calidad del agua consumi
 4. [Guía de Simulación y Sandbox Rápido](#-guía-de-simulación-y-sandbox-rápido)
 5. [Seguridad, Criptografía y RLS](#-seguridad-criptografía-y-rls)
 6. [Roadmap del Proyecto](#-roadmap-del-proyecto)
-7. [Licencia y Créditos](#-licencia-y-créditos)
+7. [Licencia y Propiedad Intelectual](#-licencia-y-propiedad-intelectual)
 
 ---
 
@@ -350,14 +350,19 @@ gantt
 
 ---
 
-## 📄 Licencia y Créditos
+## 📄 Licencia y Propiedad Intelectual
 
 Este ecosistema ha sido desarrollado con pasión e ingeniería de alto impacto por el **Equipo AQUORA**:
 * **Nicolas Archila** - Lead Software Architecture & Fullstack Dev.
 * **Susan Pulido** - Product Manager, UX/UI Design & IoT Lead.
 * **Antigravity** - Agentic AI Coding Assistant (Google DeepMind Team).
 
-El código de firmware, documentación del portal web y esquemas del sistema de monitoreo inteligente están licenciados bajo la **Licencia MIT**. Consulta el archivo `LICENSE` para ver los detalles y apreciar el arte ASCII corporativo del proyecto.
+### ⚠️ Restricciones de Uso y Licencia Comercial Estricta:
+* **Uso No Comercial y Educativo**: Se permite el uso, copia, modificación y distribución únicamente para fines no comerciales, educativos, de investigación, evaluación académica o presentación en hackathons.
+* **PROHIBICIÓN ESTRICTA DE USO COMERCIAL**: Queda **totalmente prohibido** el uso comercial, distribución con fines de lucro, sublicenciamiento o explotación económica de cualquier módulo de este ecosistema (firmware, esquemas de hardware, base de datos, backend, portal web o aplicación móvil) sin el consentimiento explícito, previo y por escrito de **AQUORA** o **Bumpo.com.co**.
+* Para consultas de licenciamiento y autorizaciones de explotación comercial, por favor contactar directamente a los titulares de los derechos o a través de [Bumpo.com.co](https://bumpo.com.co).
+
+Consulta el archivo [LICENSE](file:///e:/AQUORA/LICENSE) para ver los términos legales detallados y apreciar el arte ASCII corporativo del proyecto.
 
 ---
 
