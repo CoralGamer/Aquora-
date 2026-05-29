@@ -1,11 +1,16 @@
 {
   "expo": {
-    "name": "mobile",
+    "name": "AQUORA Comunidad",
     "slug": "mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#07111a"
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.coralgamer.mobile",
