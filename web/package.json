@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://CoralGamer.github.io/SerendipIA---Creathon-Ignia",
+  "homepage": "https://CoralGamer.github.io/Aquora-",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
