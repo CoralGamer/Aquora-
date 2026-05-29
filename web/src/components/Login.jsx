@@ -13,21 +13,54 @@ export default function Login({ onAuthSuccess, onCancel }) {
     setErrorMsg("");
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password: password
-      });
+      const emailLower = email.trim().toLowerCase();
+      const isPilotEmail = [
+        "uribia.lider@aquora.org",
+        "manaure.lider@aquora.org",
+        "riohacha.lider@aquora.org",
+        "maicao.lider@aquora.org",
+        "sanjuan.lider@aquora.org",
+        "albania.lider@aquora.org",
+        "dibulla.lider@aquora.org",
+        "barrancas.lider@aquora.org"
+      ].includes(emailLower);
 
-      if (error) {
-        throw new Error(error.message);
+      let sessionToUse = null;
+
+      if (isPilotEmail && password === "Aquora2026!") {
+        // High fidelity mock session for the pilot demo
+        sessionToUse = {
+          user: {
+            id: `mock-uuid-${emailLower.split("@")[0].replace(".", "-")}`,
+            email: emailLower,
+            user_metadata: {
+              full_name: `Líder ${emailLower.split(".")[0].toUpperCase()}`,
+              role: "community_member"
+            }
+          },
+          access_token: "mock-session-token",
+          expires_at: Math.floor(Date.now() / 1000) + 86400 // 1 day
+        };
+        localStorage.setItem("aquora_mock_session", JSON.stringify(sessionToUse));
+      } else {
+        // Standard Supabase login
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: email.trim(),
+          password: password
+        });
+
+        if (error) {
+          throw new Error(error.message);
+        }
+        sessionToUse = data.session;
       }
 
-      if (data.session) {
-        onAuthSuccess(data.session);
+      if (sessionToUse) {
+        onAuthSuccess(sessionToUse);
       }
     } catch (err) {
       console.error("Login failed:", err);
-      setErrorMsg("Credenciales de acceso incorrectas. Por favor verifica tu correo y contraseña.");
+      setErrorMsg("Credenciales de acceso incorrectas. Por favor verifica tu correo y contraseña o usa el formato piloto con clave Aquora2026!.");
     } finally {
       setLoading(false);
     }

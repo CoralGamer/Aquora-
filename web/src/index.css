@@ -33,10 +33,9 @@
   --warning:       36 100% 75%;     /* #FFCD82 — peach sand */
   --danger:        350 89% 60%;     /* #f43f5e */
 
-  /* === Tipografía === */
-  --font-display:  'Playfair Display', Georgia, serif;
+  --font-display:  'Noto Sans', sans-serif;
   --font-ui:       'Inter', system-ui, -apple-system, sans-serif;
-  --font-label:    'Outfit', system-ui, sans-serif;
+  --font-label:    'Noto Sans', sans-serif;
   --font-mono:     'JetBrains Mono', 'Courier New', monospace;
 
   /* === Spacing === */

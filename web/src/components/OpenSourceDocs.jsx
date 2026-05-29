@@ -15,6 +15,7 @@ const SECTIONS = [
     items: [
       { id: "overview", label: "Resumen del Proyecto", tab: "overview" },
       { id: "link-device", label: "Vincular Filtro Familiar", tab: "link-device" },
+      { id: "join-community", label: "Queremos ser Comunidad", tab: "join-community" },
     ],
   },
   {
@@ -22,8 +23,8 @@ const SECTIONS = [
     label: "HARDWARE & WIRING",
     num: "02",
     items: [
-      { id: "bom", label: "Materiales de Ensamble", tab: "hardware" },
-      { id: "pinout", label: "Esquema de Pines", tab: "hardware" },
+      { id: "bom", label: "Materiales de Ensamble", tab: "bom" },
+      { id: "pinout", label: "Esquema de Pines", tab: "pinout" },
     ],
   },
   {
@@ -31,8 +32,8 @@ const SECTIONS = [
     label: "COMPILING FIRMWARE",
     num: "03",
     items: [
-      { id: "arduino-setup", label: "Configurar Arduino IDE", tab: "code" },
-      { id: "firmware-src", label: "Firmware C++ (ESP32)", tab: "code" },
+      { id: "arduino-setup", label: "Configurar Arduino IDE", tab: "arduino-setup" },
+      { id: "firmware-src", label: "Firmware C++ (ESP32)", tab: "firmware-src" },
     ],
   },
   {
@@ -55,18 +56,71 @@ const TOC_MAP = {
     { label: "Solicitar Clave", anchor: "request-key" },
     { label: "Activacion", anchor: "activation" },
   ],
-  hardware: [
+  "join-community": [
+    { label: "Postular Comunidad", anchor: "postulate-comm" },
+    { label: "Acompañamiento Hídrico", anchor: "support-info" },
+  ],
+  bom: [
     { label: "Requisitos del Filtro", anchor: "reqs" },
     { label: "Lista de Materiales (BOM)", anchor: "bom-table" },
-    { label: "Asignacion de Pines", anchor: "pinout-section" },
   ],
-  code: [
-    { label: "Instrucciones", anchor: "code-intro" },
-    { label: "Codigo Fuente", anchor: "code-block" },
+  pinout: [
+    { label: "Tabla de Conexiones", anchor: "pinout-section" },
+    { label: "Pines Activos", anchor: "pin-ref" },
+  ],
+  "arduino-setup": [
+    { label: "Configurar Entorno", anchor: "code-intro" },
+    { label: "Guia de Montaje", anchor: "assembly-guide" },
+    { label: "Simulacion Wokwi", anchor: "wokwi-sim" },
+  ],
+  "firmware-src": [
+    { label: "Codigo Fuente v2.2", anchor: "code-block" },
   ],
   faq: [
     { label: "Preguntas Frecuentes", anchor: "faq-list" },
   ],
+};
+
+const COLOMBIA_LOCATIONS = {
+  "La Guajira": [
+    "Uribia",
+    "Manaure",
+    "Riohacha",
+    "Maicao",
+    "San Juan del Cesar",
+    "Albania",
+    "Dibulla",
+    "Barrancas"
+  ],
+  "Magdalena": [
+    "Santa Marta",
+    "Ciénaga",
+    "Aracataca",
+    "Plato",
+    "Fundación",
+    "El Banco"
+  ],
+  "Atlántico": [
+    "Barranquilla",
+    "Soledad",
+    "Malambo",
+    "Sabanalarga",
+    "Puerto Colombia"
+  ],
+  "Bolívar": [
+    "Cartagena",
+    "Turbaco",
+    "Arjona",
+    "Magangué",
+    "El Carmen de Bolívar"
+  ],
+  "Cesar": [
+    "Valledupar",
+    "Aguachica",
+    "Agustín Codazzi",
+    "Bosconia",
+    "San Diego"
+  ]
 };
 
 // ── FAQ data ────────────────────────────────────────────
@@ -90,90 +144,164 @@ const FAQS = [
 ];
 
 // ── Firmware source code ────────────────────────────────
-const cppCode = `#include <WiFi.h>
+const cppCode = `// ============================================================
+// AQUORA - FIRMWARE DE TELEMETRIA v2.2 (HTTP Plano)
+// ============================================================
+// Simulacion en Wokwi con ESP32 DevKit-C v4
+// Sensores: TDS (pot), Turbidez (pot), Nivel (HC-SR04)
+// Conectividad: WiFi -> HTTP POST a API REST via ngrok
+// ============================================================
+
+#include <WiFi.h>
 #include <HTTPClient.h>
 
-// --- CONFIGURACION DE RED WIFI ---
-const char* ssid     = "Wokwi-GUEST"; // O el SSID de la comunidad
-const char* password = "";            // Clave del WiFi
+// --- CONFIGURACION DE RED ---
+const char* ssid     = "Wokwi-GUEST";
+const char* password = "";
 
-// --- ENLACE A LA API DE AQUORA ---
-// Endpoint de ingesta segura en FastAPI
-const char* serverURL = "http://127.0.0.1:8000/api/v1/readings";
+// --- ENDPOINT API (HTTP plano, sin HTTPS) ---
+const char* serverURL = "http://TU_TUNNEL_NGROK.ngrok-free.dev/api/v1/readings";
 
 // --- CLAVE UNICA DE TU FILTRO ---
-// Ingresa la clave devuelta en el formulario de vinculacion
-const String deviceKey = "INGRESAR_TU_CLAVE_AQUI";
+// Ingresa la "Clave de API de Firmware" asignada a tu purificador.
+// Se obtiene en el Panel de Aprovisionamiento de AQUORA.
+// Formato: "aq_api_XXXXXXXXXXXXXXXX"
+const String deviceKey = "aq_api_TU_CLAVE_AQUI";
 
-// Pines de Hardware
-#define PIN_TDS A0
-#define PIN_TURB A1
-#define PIN_TRIG 12
-#define PIN_ECHO 13
-#define LED_RED 2
-#define LED_GREEN 4
+// --- PINES DE SENSORES ---
+const int pinTDS       = 34;   // Potenciometro TDS -> GPIO34 (ADC)
+const int pinTurbidity = 35;   // Potenciometro Turbidez -> GPIO35 (ADC)
+const int pinTrigger   = 5;    // HC-SR04 TRIG -> GPIO5
+const int pinEcho      = 18;   // HC-SR04 ECHO -> GPIO18
+const int pinLED       = 2;    // LED integrado ESP32
+
+// --- TIEMPOS ---
+const unsigned long sendInterval = 15000;  // Enviar cada 15 segundos
+unsigned long lastSendTime = 0;
+
+// --- PROMEDIO MOVIL ---
+const int N = 20;
+int bufTDS[N], bufTurb[N];
+int idx = 0;
+bool bufferReady = false;
+
+// --- TANQUE ---
+const float tankH     = 200.0;  // Altura total del tanque (cm)
+const float sensorOff = 10.0;   // Offset del sensor desde el tope (cm)
 
 void setup() {
   Serial.begin(115200);
-  pinMode(LED_RED, OUTPUT);
-  pinMode(LED_GREEN, OUTPUT);
-  
+  delay(500);
+  Serial.println("=============================================");
+  Serial.println("   AQUORA SMART WATER MONITOR v2.2");
+  Serial.println("=============================================");
+
+  pinMode(pinLED, OUTPUT);
+  pinMode(pinTDS, INPUT);
+  pinMode(pinTurbidity, INPUT);
+  pinMode(pinTrigger, OUTPUT);
+  pinMode(pinEcho, INPUT);
+
+  memset(bufTDS, 0, sizeof(bufTDS));
+  memset(bufTurb, 0, sizeof(bufTurb));
+
   WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    digitalWrite(LED_RED, !digitalRead(LED_RED)); // Parpadeo indica intentando red
+  int tries = 0;
+  while (WiFi.status() != WL_CONNECTED && tries < 50) {
+    delay(400);
+    digitalWrite(pinLED, tries % 2);  // Parpadeo = conectando
+    tries++;
   }
-  
-  digitalWrite(LED_RED, LOW);
-  digitalWrite(LED_GREEN, HIGH); // Luz verde indica red estable
+
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println("[WiFi] CONECTADO - IP: " + WiFi.localIP().toString());
+    digitalWrite(pinLED, HIGH);  // LED fijo = conectado
+  } else {
+    Serial.println("[WiFi] ERROR: No se pudo conectar");
+    digitalWrite(pinLED, LOW);
+  }
 }
 
 void loop() {
-  if (WiFi.status() == WL_CONNECTED) {
-    // 1. Lectura del sensor de TDS
-    int rawTds = analogRead(PIN_TDS);
-    float voltageTds = rawTds * (3.3 / 4095.0);
-    float tdsValue = (133.3 * voltageTds * voltageTds * voltageTds - 255.86 * voltageTds * voltageTds + 857.39 * voltageTds) * 0.5;
+  bufTDS[idx]  = analogRead(pinTDS);
+  bufTurb[idx] = analogRead(pinTurbidity);
+  idx++;
+  if (idx >= N) { idx = 0; bufferReady = true; }
 
-    // 2. Lectura del sensor de Turbidez
-    int rawTurb = analogRead(PIN_TURB);
-    float voltageTurb = rawTurb * (3.3 / 4095.0);
-    float turbidityValue = -1120.4 * voltageTurb * voltageTurb + 5742.3 * voltageTurb - 4352.9;
-    if (turbidityValue < 0) turbidityValue = 0.0;
-
-    // 3. Medicion de Nivel del Tanque (Ultrasonico)
-    digitalWrite(PIN_TRIG, LOW);
-    delayMicroseconds(2);
-    digitalWrite(PIN_TRIG, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(PIN_TRIG, LOW);
-    long duration = pulseIn(PIN_ECHO, HIGH);
-    float distanceCm = duration * 0.034 / 2;
-    float levelPercent = 100.0 - ((distanceCm / 100.0) * 100.0);
-    if (levelPercent < 0) levelPercent = 0.0;
-    if (levelPercent > 100) levelPercent = 100.0;
-
-    // 4. Envio HTTP POST seguro encapsulado en JSON
-    HTTPClient http;
-    http.begin(serverURL);
-    http.addHeader("Content-Type", "application/json");
-
-    String jsonPayload = "{\\"device_key\\":\\"" + deviceKey + "\\"," +
-                         "\\"tds_ppm\\":" + String(tdsValue, 2) + "," +
-                         "\\"turbidity_ntu\\":" + String(turbidityValue, 2) + "," +
-                         "\\"water_level_pct\\":" + String(levelPercent, 2) + "}";
-
-    int responseCode = http.POST(jsonPayload);
-    http.end();
-
-    // Alerta fisica local de calidad
-    if (tdsValue > 400.0 || turbidityValue > 5.0) {
-      digitalWrite(LED_RED, HIGH);
-    } else {
-      digitalWrite(LED_RED, LOW);
+  unsigned long now = millis();
+  if (now - lastSendTime >= sendInterval) {
+    lastSendTime = now;
+    if (WiFi.status() != WL_CONNECTED) {
+      WiFi.reconnect(); delay(3000);
+      if (WiFi.status() != WL_CONNECTED) return;
     }
+
+    float tds   = calcTDS();
+    float turb  = calcTurb();
+    float level = calcLevel();
+    sendTelemetry(tds, turb, level);
   }
-  delay(15000);
+  delay(100);
+}
+
+// --- FUNCIONES DE SENSORES ---
+float avg(int* buf) {
+  long s = 0;
+  int count = bufferReady ? N : (idx > 0 ? idx : 1);
+  for (int i = 0; i < count; i++) s += buf[i];
+  return (float)s / count;
+}
+
+float calcTDS() {
+  float voltage = avg(bufTDS) * (3.3 / 4095.0);
+  return max((voltage / 2.3) * 1000.0f, 0.0f);
+}
+
+float calcTurb() {
+  float voltage = avg(bufTurb) * (3.3 / 4095.0);
+  return constrain((1.0 - voltage / 3.3) * 100.0f, 0.0f, 100.0f);
+}
+
+float calcLevel() {
+  digitalWrite(pinTrigger, LOW);
+  delayMicroseconds(2);
+  digitalWrite(pinTrigger, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(pinTrigger, LOW);
+  long dur = pulseIn(pinEcho, HIGH, 30000);
+  if (dur == 0) return 0.0;
+  float d = constrain(dur * 0.01715, sensorOff, tankH);
+  return ((tankH - d) / (tankH - sensorOff)) * 100.0;
+}
+
+// --- ENVIO HTTP ---
+void sendTelemetry(float tds, float turb, float level) {
+  HTTPClient http;
+  http.begin(serverURL);
+  http.setTimeout(10000);
+  http.addHeader("Content-Type", "application/json");
+  http.addHeader("ngrok-skip-browser-warning", "69420");
+
+  String json = "{";
+  json += "\\"device_key\\":\\"" + deviceKey + "\\",";
+  json += "\\"tds_ppm\\":" + String(tds, 2) + ",";
+  json += "\\"turbidity_ntu\\":" + String(turb, 2) + ",";
+  json += "\\"water_level_pct\\":" + String(level, 2);
+  json += "}";
+
+  int httpCode = http.POST(json);
+  if (httpCode == 200 || httpCode == 201) {
+    Serial.println("[OK] Dato enviado exitosamente!");
+    for (int i = 0; i < 6; i++) {
+      digitalWrite(pinLED, i % 2); delay(80);
+    }
+    digitalWrite(pinLED, HIGH);
+  } else {
+    Serial.println("[HTTP] ERROR: " + http.errorToString(httpCode));
+    digitalWrite(pinLED, LOW); delay(500);
+    digitalWrite(pinLED, HIGH);
+  }
+  http.end();
 }`;
 
 // ═══════════════════════════════════════════════════════
@@ -591,12 +719,14 @@ const S = {
   `,
 };
 
-
 // ═══════════════════════════════════════════════════════
 //  Component
 // ═══════════════════════════════════════════════════════
 
-export default function OpenSourceDocs() {
+export default function OpenSourceDocs({ getApiUrl }) {
+  // Derive API base
+  const apiBase = getApiUrl ? getApiUrl() : "http://localhost:8000";
+
   // ── State ──────────────────────────────────────────
   const [activeItem, setActiveItem] = useState("bom");
   const [openFaqIdx, setOpenFaqIdx] = useState(0);
@@ -610,6 +740,34 @@ export default function OpenSourceDocs() {
   const [loading, setLoading] = useState(false);
   const [requestedKey, setRequestedKey] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+
+  // Community request state
+  const [commName, setCommName] = useState("");
+  const [commEmail, setCommEmail] = useState("");
+  const [selectedDept, setSelectedDept] = useState("La Guajira");
+  const [selectedMuni, setSelectedMuni] = useState("Uribia");
+  const [commCorregimiento, setCommCorregimiento] = useState("");
+  const [commDesc, setCommDesc] = useState("");
+  const [commLoading, setCommLoading] = useState(false);
+  const [commSuccess, setCommSuccess] = useState(false);
+  const [commError, setCommError] = useState("");
+
+  // State for loaded departments and municipalities of Colombia (defaults to fallback)
+  const [locationsMap, setLocationsMap] = useState(COLOMBIA_LOCATIONS);
+
+  // Municipalities map
+  const municipalities = useMemo(() => {
+    return locationsMap[selectedDept] || [];
+  }, [selectedDept, locationsMap]);
+
+  // Reset selected municipality when department changes
+  useEffect(() => {
+    if (municipalities.length > 0) {
+      if (!municipalities.includes(selectedMuni)) {
+        setSelectedMuni(municipalities[0]);
+      }
+    }
+  }, [selectedDept, municipalities]);
 
   // Derive active tab from active sidebar item
   const activeTab = useMemo(() => {
@@ -630,10 +788,52 @@ export default function OpenSourceDocs() {
       .select("id, name")
       .order("name", { ascending: true })
       .then(({ data, error }) => {
-        if (!error && data) {
+        if (!error && data && data.length > 0) {
           setCommunities(data);
-          if (data.length > 0) setSelectedCommId(data[0].id);
+          setSelectedCommId(data[0].id);
+        } else {
+          // Respaldo robusto de comunidades piloto aprobadas/aceptadas
+          const fallbackComms = [
+            { id: "7b91f03b-4cf5-41b0-87e4-2515c9acb225", name: "Comunidad Uribia" },
+            { id: "28d1b963-3751-4928-b773-e184e9b9d505", name: "Comunidad Manaure" },
+            { id: "gen-comm-riohacha", name: "Comunidad Riohacha" },
+            { id: "gen-comm-maicao", name: "Comunidad Maicao" },
+            { id: "gen-comm-sanjuan", name: "Comunidad San Juan del Cesar" },
+            { id: "gen-comm-albania", name: "Comunidad Albania" },
+            { id: "gen-comm-dibulla", name: "Comunidad Dibulla" },
+            { id: "gen-comm-barrancas", name: "Comunidad Barrancas" }
+          ];
+          setCommunities(fallbackComms);
+          setSelectedCommId(fallbackComms[0].id);
         }
+      });
+
+    // Cargar todos los departamentos y municipios de Colombia de forma asíncrona desde GitHub
+    fetch("https://raw.githubusercontent.com/marcovega/colombia-json/master/colombia.json")
+      .then((res) => {
+        if (!res.ok) throw new Error("Error en red al descargar base de datos de municipios");
+        return res.json();
+      })
+      .then((data) => {
+        if (Array.isArray(data)) {
+          const map = {};
+          // Ordenar los departamentos alfabéticamente (con manejo de acentos en español)
+          const sortedData = [...data].sort((a, b) => 
+            a.departamento.localeCompare(b.departamento, 'es', { sensitivity: 'base' })
+          );
+          sortedData.forEach((item) => {
+            if (item.departamento && Array.isArray(item.ciudades)) {
+              // Ordenar las ciudades de cada departamento alfabéticamente
+              map[item.departamento] = [...item.ciudades].sort((a, b) => 
+                a.localeCompare(b, 'es', { sensitivity: 'base' })
+              );
+            }
+          });
+          setLocationsMap(map);
+        }
+      })
+      .catch((err) => {
+        console.error("Error al cargar departamentos de Colombia desde GitHub, usando fallbacks locales:", err);
       });
   }, []);
 
@@ -650,26 +850,63 @@ export default function OpenSourceDocs() {
     setErrorMsg("");
     setRequestedKey("");
     try {
-      const randomDigits = Math.floor(1000 + Math.random() * 9000);
-      const generatedKey = `DEV_ESP32_GUAF${randomDigits}`;
-      const { error } = await supabase
-        .from("devices")
-        .insert({
+      const response = await fetch(`${apiBase}/api/v1/requests/filter`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: requesterName,
+          email: requesterEmail,
           community_id: selectedCommId,
-          device_key: generatedKey,
-          active: false,
-        });
-      if (error) throw new Error(error.message);
-      setRequestedKey(generatedKey);
+        })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.detail || "Error al registrar solicitud de filtro.");
+      }
+      setRequestedKey("PENDIENTE_APROBACION");
       setRequesterName("");
       setRequesterEmail("");
     } catch (err) {
       console.error("Error requesting key:", err);
       setErrorMsg(
-        "Ocurrio un error al registrar la clave del dispositivo. Posiblemente la comunidad seleccionada ya tenga demasiados sensores enlazados."
+        err.message || "Ocurrió un error al registrar la solicitud de filtro. Verifique la conexión al backend de AQUORA."
       );
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRequestCommunity = async (e) => {
+    e.preventDefault();
+    setCommLoading(true);
+    setCommError("");
+    setCommSuccess(false);
+    try {
+      const response = await fetch(`${apiBase}/api/v1/requests/community`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: commName,
+          email: commEmail,
+          department: selectedDept,
+          municipality: selectedMuni,
+          corregimiento: commCorregimiento,
+          description: commDesc
+        })
+      });
+      if (!response.ok) {
+        throw new Error("Error al enviar postulación");
+      }
+      setCommSuccess(true);
+      setCommName("");
+      setCommEmail("");
+      setCommCorregimiento("");
+      setCommDesc("");
+    } catch (err) {
+      console.error("Error requesting community:", err);
+      setCommError("Ocurrió un error al registrar la comunidad. Verifique la conexión al backend de AQUORA.");
+    } finally {
+      setCommLoading(false);
     }
   };
 
@@ -843,7 +1080,7 @@ export default function OpenSourceDocs() {
     </div>
   );
 
-  const renderHardware = () => (
+  const renderBom = () => (
     <div>
       <h2 id="reqs" style={S.sectionTitle}>
         Requisitos del Filtro Inteligente
@@ -851,9 +1088,9 @@ export default function OpenSourceDocs() {
       <p style={S.bodyText}>
         El cerebro electronico esta disenado en base a hardware de bajo costo y
         facil adquisicion. Utiliza un microcontrolador{" "}
-        <strong>ESP32 DevKit-C</strong> integrado con sensores analogicos
+        <strong>ESP32 DevKit-C v4</strong> (Dual-core 240MHz) integrado con sensores analogicos
         robustos de grado industrial para soportar las condiciones climaticas
-        extremas de La Guajira.
+        extremas de La Guajira. El firmware AQUORA v2.2 utiliza 5 pines GPIO, un ADC de 12 bits (rango 0-4095) y opera a 3.3V.
       </p>
 
       <h3 id="bom-table" style={S.sectionSubtitle}>
@@ -870,26 +1107,10 @@ export default function OpenSourceDocs() {
           </thead>
           <tbody>
             {[
-              [
-                "ESP32 DevKit-C v4",
-                "Microcontrolador con antena WiFi/Bluetooth y pines ADC de 12 bits.",
-                "ESP32-WROOM-32D",
-              ],
-              [
-                "Sensor de TDS Analogico",
-                "Mide la pureza quimica del agua mediante conductividad (ppm).",
-                "Gravity TDS Sensor V1.0",
-              ],
-              [
-                "Sensor de Turbidez",
-                "Mide la claridad fisica del agua mediante diodos opticos (NTU).",
-                "TSW-30 / Gravity Turbidity",
-              ],
-              [
-                "Sensor Ultrasonico",
-                "Mide el volumen de agua disponible por rebote en la tapa del tanque.",
-                "HC-SR04 / JSN-SR04T",
-              ],
+              ["ESP32 DevKit-C v4", "Microcontrolador con antena WiFi/Bluetooth y pines ADC de 12 bits.", "ESP32-WROOM-32D"],
+              ["Sensor de TDS Analogico", "Mide la pureza quimica del agua mediante conductividad (ppm).", "Gravity TDS Sensor V1.0"],
+              ["Sensor de Turbidez", "Mide la claridad fisica del agua mediante diodos opticos (NTU).", "TSW-30 / Gravity Turbidity"],
+              ["Sensor Ultrasonico", "Mide el volumen de agua disponible por rebote en la tapa del tanque.", "HC-SR04 / JSN-SR04T"],
             ].map(([comp, purpose, model], i) => (
               <tr key={i}>
                 <td style={S.tdBold(i % 2 === 1)}>{comp}</td>
@@ -900,54 +1121,221 @@ export default function OpenSourceDocs() {
           </tbody>
         </table>
       </div>
-
-      <h3 id="pinout-section" style={S.sectionSubtitle}>
-        Asignacion de Pines del Microcontrolador
-      </h3>
-      <ul style={S.pinList}>
-        {[
-          { label: "TDS Analog Output", pin: "GPIO36 (ADC1_CH0)", color: "hsl(var(--ocean))" },
-          { label: "Turbidez Analog Output", pin: "GPIO39 (ADC1_CH3)", color: "hsl(var(--ocean))" },
-          { label: "Trigger Ultrasonico", pin: "GPIO12", color: "hsl(var(--ocean))" },
-          { label: "Echo Ultrasonico", pin: "GPIO13", color: "hsl(var(--ocean))" },
-          { label: "LED Rojo (Error/Mantenimiento)", pin: "GPIO2", color: "hsl(var(--danger))" },
-          { label: "LED Verde (En Linea)", pin: "GPIO4", color: "hsl(var(--teal-success))" },
-        ].map((p, i) => (
-          <li key={i} style={S.pinItem}>
-            <span style={S.pinDot(p.color)} />
-            <span>
-              <strong>{p.label}:</strong> Conectar al pin{" "}
-              <code style={S.inlineCode}>{p.pin}</code>
-            </span>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 
-  const renderCode = () => (
+  const renderPinout = () => (
+    <div>
+      <h3 id="pinout-section" style={S.sectionTitle}>
+        Tabla Maestra de Conexiones
+      </h3>
+      <p style={S.bodyText}>
+        Todas las conexiones entre los sensores y el ESP32. Los tres sensores comparten el mismo rail de alimentacion 3.3V y masa comun GND.
+      </p>
+      <div style={{ overflowX: "auto" }}>
+        <table style={S.table}>
+          <thead>
+            <tr>
+              <th style={S.th}>Dispositivo</th>
+              <th style={S.th}>Pin</th>
+              <th style={S.th}>Cable</th>
+              <th style={S.th}>ESP32 GPIO</th>
+              <th style={S.th}>Tipo</th>
+              <th style={S.th}>Notas</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              ["TDS", "VCC", "Rojo", "#e74c3c", "3V3", "Alimentacion", "3.3V, no usar 5V"],
+              ["TDS", "GND", "Negro", "#555", "GND", "Tierra", "Masa comun"],
+              ["TDS", "SIG/OUT", "Verde", "#2ecc71", "GPIO 34", "ADC analogico", "Solo INPUT. pinTDS = 34"],
+              ["Turbidez", "VCC", "Rojo", "#e74c3c", "3V3", "Alimentacion", "3.3V, mismo rail"],
+              ["Turbidez", "GND", "Negro", "#555", "GND", "Tierra", "Masa comun"],
+              ["Turbidez", "SIG/OUT", "Azul", "#4a9eff", "GPIO 35", "ADC analogico", "Solo INPUT. pinTurbidity = 35"],
+              ["HC-SR04", "VCC", "Rojo", "#e74c3c", "3V3", "Alimentacion", "3.3-5V. 3.3V en Wokwi"],
+              ["HC-SR04", "GND", "Negro", "#555", "GND", "Tierra", "Masa comun"],
+              ["HC-SR04", "TRIG", "Naranja", "#e67e22", "GPIO 5", "Digital OUT", "Pulso 10 us. pinTrigger = 5"],
+              ["HC-SR04", "ECHO", "Amarillo", "#f1c40f", "GPIO 18", "Digital IN", "Pulso retorno. pinEcho = 18"],
+              ["ESP32", "LED", "\u2014", "#00c8b4", "GPIO 2", "Digital OUT", "Estado WiFi. pinLED = 2"],
+            ].map(([device, pin, cable, color, gpio, tipo, notas], i) => (
+              <tr key={i}>
+                <td style={S.tdBold(i % 2 === 1)}>{device}</td>
+                <td style={S.tdMono(i % 2 === 1)}>{pin}</td>
+                <td style={S.td(i % 2 === 1)}><span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}><span style={{ width: 8, height: 8, borderRadius: "50%", background: color, display: "inline-block" }} />{cable}</span></td>
+                <td style={S.tdMono(i % 2 === 1)}>{gpio}</td>
+                <td style={S.td(i % 2 === 1)}>{tipo}</td>
+                <td style={{ ...S.td(i % 2 === 1), fontSize: "0.8rem" }}>{notas}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="pin-ref" style={S.sectionSubtitle}>Referencia Rapida de Pines Activos</h3>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "10px", marginBottom: "var(--space-lg)" }}>
+        {[
+          { gpio: "34", name: "Sensor TDS", detail: "ADC, analogico, solo INPUT", color: "#2ecc71" },
+          { gpio: "35", name: "Sensor Turbidez", detail: "ADC, analogico, solo INPUT", color: "#4a9eff" },
+          { gpio: "5", name: "HC-SR04 TRIG", detail: "Digital OUTPUT, pulso 10 us", color: "#e67e22" },
+          { gpio: "18", name: "HC-SR04 ECHO", detail: "Digital INPUT, pulso retorno", color: "#f1c40f" },
+          { gpio: "2", name: "LED Integrado", detail: "Digital OUTPUT, estado WiFi", color: "hsl(var(--ocean))" },
+        ].map((p, i) => (
+          <div key={i} style={{ background: "hsla(var(--bg-surface) / 0.5)", border: "1px solid hsl(var(--border))", borderRadius: "var(--radius-sm)", padding: "12px 14px", display: "flex", alignItems: "center", gap: "12px" }}>
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: "20px", fontWeight: 500, color: p.color, minWidth: "36px" }}>{p.gpio}</span>
+            <div>
+              <div style={{ fontSize: "0.85rem", fontWeight: 500, color: "hsl(var(--text-primary))" }}>{p.name}</div>
+              <div style={{ fontSize: "0.72rem", color: "hsl(var(--text-dim))", fontFamily: "var(--font-mono)" }}>{p.detail}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontSize: "0.82rem", color: "#e0a060", background: "rgba(230,126,34,0.06)", border: "1px solid rgba(230,126,34,0.15)", borderRadius: "var(--radius-sm)", padding: "0.75rem 1rem", marginBottom: "var(--space-lg)" }}>
+        \u26a0\ufe0f En hardware fisico, el pin ECHO del HC-SR04 devuelve 5V. Usar divisor resistivo 1k\u03a9 / 2k\u03a9 entre ECHO y GPIO18 para no exceder los 3.3V del ESP32. GPIO34 y GPIO35 son input-only.
+      </div>
+    </div>
+  );
+
+  const renderArduinoSetup = () => (
     <div>
       <h2 id="code-intro" style={S.sectionTitle}>
-        Cargar Firmware del Dispositivo
+        Configurar Entorno de Desarrollo
       </h2>
       <p style={S.bodyText}>
-        Abre el codigo a continuacion en tu <strong>Arduino IDE</strong> o
-        proyecto de <strong>PlatformIO</strong>. Reemplaza la direccion IP/ngrok
-        del servidor y escribe la clave unica obtenida del formulario de
-        vinculacion.
+        Instrucciones para preparar Arduino IDE, compilar el firmware AQUORA v2.2 y subirlo al ESP32.
       </p>
 
-      <div id="code-block" style={S.codeWrap}>
+      <h3 style={S.sectionSubtitle}>Pasos de Configuracion</h3>
+      <div style={{ display: "flex", flexDirection: "column", gap: 0, marginBottom: "var(--space-lg)" }}>
+        {[
+          { num: "1", title: "Instalar Arduino IDE 2.x", desc: "Descarga desde arduino.cc/software. Version 2.3+ recomendada." },
+          { num: "2", title: "Agregar soporte ESP32", desc: "Archivo > Preferencias > URLs adicionales de Gestor de Tarjetas. Pega: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json" },
+          { num: "3", title: "Instalar tarjeta ESP32", desc: "Herramientas > Placa > Gestor de Tarjetas. Busca \"esp32\" e instala \"esp32 by Espressif Systems\" v2.0+." },
+          { num: "4", title: "Seleccionar placa y puerto", desc: "Herramientas > Placa > ESP32 Dev Module. Herramientas > Puerto > COMx (el puerto USB donde esta conectado el ESP32)." },
+          { num: "5", title: "Editar las 3 variables clave", desc: 'En el firmware, cambia: ssid = tu red WiFi, password = tu clave WiFi, serverURL = tu URL ngrok, deviceKey = tu clave aq_api_XXXXXXXX del Panel de Aprovisionamiento.' },
+          { num: "6", title: "Compilar y subir", desc: "Click en Subir (flecha). Espera a que compile (1-2 min primera vez). Abre Monitor Serial a 115200 baud para verificar." },
+        ].map((step, i) => (
+          <div key={i} style={{ display: "grid", gridTemplateColumns: "36px 1fr", gap: "0 0.75rem", position: "relative" }}>
+            {i < 5 && <div style={{ position: "absolute", left: "17px", top: "36px", bottom: "-8px", width: "2px", background: "hsl(var(--border))", zIndex: 0 }} />}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "0.6rem", position: "relative", zIndex: 1 }}>
+              <div style={{ width: "28px", height: "28px", borderRadius: "50%", border: "1px solid hsl(var(--ocean))", background: "hsla(var(--ocean) / 0.08)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--font-mono)", fontSize: "0.7rem", fontWeight: 500, color: "hsl(var(--ocean))" }}>{step.num}</div>
+            </div>
+            <div style={{ background: "hsla(var(--bg-surface) / 0.5)", border: "1px solid hsl(var(--border))", borderRadius: "var(--radius-sm)", padding: "0.65rem 0.85rem", marginBottom: "10px" }}>
+              <h4 style={{ fontSize: "0.82rem", fontWeight: 500, color: "hsl(var(--text-primary))", marginBottom: "4px", fontFamily: "var(--font-label)" }}>{step.title}</h4>
+              <p style={{ fontSize: "0.78rem", color: "hsl(var(--text-secondary))", lineHeight: 1.5, margin: 0 }}>{step.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Assembly Guide */}
+      <h3 id="assembly-guide" style={S.sectionSubtitle}>Guia de Montaje Paso a Paso</h3>
+      <p style={S.bodyText}>
+        Instrucciones de ensamblaje fisico, desde la inspeccion de la placa hasta la verificacion del sistema.
+      </p>
+      <div style={{ display: "flex", flexDirection: "column", gap: 0, marginBottom: "var(--space-lg)" }}>
+        {[
+          { num: "01", title: "Verifica el ESP32 DevKit-C v4", desc: "Inspecciona la placa de 38 pines. Ubica 3V3, GND.1, GPIO34, GPIO35, GPIO5, GPIO18. Confirma que el micro-USB funciona.", note: "GPIO34 y GPIO35 son input-only. No pueden usarse como salida." },
+          { num: "02", title: "Conecta el rail de alimentacion (3V3 y GND)", desc: "Cable rojo de ESP32 3V3 al rail positivo de la protoboard. Cable negro de GND.1 al rail negativo. Los tres sensores se alimentan desde estos rails." },
+          { num: "03", title: "Conecta el sensor TDS a GPIO34", desc: "VCC a 3V3 (rojo). GND a GND (negro). SIG/OUT a GPIO34 (verde). No compartir GPIO34 con otro componente." },
+          { num: "04", title: "Conecta el sensor de Turbidez a GPIO35", desc: "VCC a 3V3 (rojo). GND a GND (negro). SIG/OUT a GPIO35 (azul). Separado de GPIO34 para evitar interferencia." },
+          { num: "05", title: "Conecta HC-SR04 a GPIO5 y GPIO18", desc: "VCC a 3V3. GND a GND. TRIG a GPIO5 (naranja). ECHO a GPIO18 (amarillo). Hardware real: divisor 1k\u03a9/2k\u03a9 en ECHO.", note: "Montar en la tapa del tanque apuntando hacia abajo. tankH = 200 cm, sensorOff = 10 cm." },
+          { num: "06", title: "Flashea el firmware", desc: "Abre el .ino en Arduino IDE. Selecciona ESP32 Dev Module. Edita deviceKey, ssid, password y serverURL. Compila y sube. Serial Monitor a 115200 baud." },
+          { num: "07", title: "Verifica indicadores LED", desc: "Parpadeo = conectando WiFi. Fijo ON = conectado. Rapido x6 cada 15s = telemetria enviada. Apagado breve = error HTTP.", note: "Si ves [OK] Dato enviado exitosamente! con codigo 200/201, el sistema funciona correctamente." },
+        ].map((step, i) => (
+          <div key={i} style={{ display: "grid", gridTemplateColumns: "50px 1fr", gap: "0 1rem", position: "relative" }}>
+            {i < 6 && <div style={{ position: "absolute", left: "24px", top: "44px", bottom: "-12px", width: "2px", background: "hsl(var(--border))", zIndex: 0 }} />}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "0.75rem", position: "relative", zIndex: 1 }}>
+              <div style={{ width: "36px", height: "36px", borderRadius: "50%", border: "1px solid hsl(var(--ocean))", background: "hsla(var(--ocean) / 0.08)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--font-mono)", fontSize: "0.75rem", fontWeight: 500, color: "hsl(var(--ocean))" }}>{step.num}</div>
+            </div>
+            <div style={{ background: "hsla(var(--bg-surface) / 0.5)", border: "1px solid hsl(var(--border))", borderRadius: "var(--radius-sm)", padding: "0.85rem 1rem", marginBottom: "16px" }}>
+              <h4 style={{ fontSize: "0.85rem", fontWeight: 500, color: "hsl(var(--text-primary))", marginBottom: "6px", fontFamily: "var(--font-label)" }}>{step.title}</h4>
+              <p style={{ fontSize: "0.82rem", color: "hsl(var(--text-secondary))", lineHeight: 1.6, margin: 0 }}>{step.desc}</p>
+              {step.note && (
+                <div style={{ marginTop: "8px", fontSize: "0.78rem", color: "hsl(var(--sky))", background: "hsla(var(--ocean) / 0.06)", border: "1px solid hsla(var(--ocean) / 0.15)", borderRadius: "var(--radius-sm)", padding: "6px 10px" }}>
+                  {step.note}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Wokwi Simulation */}
+      <h3 id="wokwi-sim" style={S.sectionSubtitle}>Simulacion en Wokwi</h3>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "var(--space-md)" }}>
+        <div style={{ background: "hsla(var(--bg-surface) / 0.5)", border: "1px solid hsl(var(--border))", borderRadius: "var(--radius-md)", padding: "1rem" }}>
+          <h4 style={{ fontSize: "0.85rem", fontWeight: 500, color: "hsl(var(--text-primary))", marginBottom: "0.75rem" }}>Componentes en Wokwi</h4>
+          <p style={{ fontSize: "0.82rem", color: "hsl(var(--text-secondary))", marginBottom: "8px" }}>El <code style={S.inlineCode}>diagram.json</code> usa potenciometros para simular sensores analogicos.</p>
+          <ul style={{ ...S.pinList, gap: "4px" }}>
+            <li style={{ ...S.pinItem, fontSize: "0.8rem" }}><span style={S.pinDot("hsl(var(--ocean))")} /><code style={S.inlineCode}>board-esp32-devkit-c-v4</code></li>
+            <li style={{ ...S.pinItem, fontSize: "0.8rem" }}><span style={S.pinDot("#2ecc71")} /><code style={S.inlineCode}>wokwi-potentiometer</code> (potTDS) — GPIO34</li>
+            <li style={{ ...S.pinItem, fontSize: "0.8rem" }}><span style={S.pinDot("#4a9eff")} /><code style={S.inlineCode}>wokwi-potentiometer</code> (potTurbidity) — GPIO35</li>
+            <li style={{ ...S.pinItem, fontSize: "0.8rem" }}><span style={S.pinDot("#f1c40f")} /><code style={S.inlineCode}>wokwi-hc-sr04</code> (sonarLevel) — GPIO5/18</li>
+          </ul>
+        </div>
+        <div style={{ background: "hsla(var(--bg-surface) / 0.5)", border: "1px solid hsl(var(--border))", borderRadius: "var(--radius-md)", padding: "1rem" }}>
+          <h4 style={{ fontSize: "0.85rem", fontWeight: 500, color: "hsl(var(--text-primary))", marginBottom: "0.75rem" }}>Conectividad</h4>
+          <p style={{ fontSize: "0.82rem", color: "hsl(var(--text-secondary))", marginBottom: "8px" }}>WiFi simulado con acceso HTTP real a internet.</p>
+          <ul style={{ ...S.pinList, gap: "4px" }}>
+            <li style={{ ...S.pinItem, fontSize: "0.8rem" }}><span style={S.pinDot("hsl(var(--ocean))")} />SSID: <code style={S.inlineCode}>Wokwi-GUEST</code> (sin clave)</li>
+            <li style={{ ...S.pinItem, fontSize: "0.8rem" }}><span style={S.pinDot("hsl(var(--ocean))")} />HTTP plano (no HTTPS)</li>
+            <li style={{ ...S.pinItem, fontSize: "0.8rem" }}><span style={S.pinDot("hsl(var(--ocean))")} />Endpoint via <code style={S.inlineCode}>ngrok</code></li>
+            <li style={{ ...S.pinItem, fontSize: "0.8rem" }}><span style={S.pinDot("hsl(var(--ocean))")} />Header: <code style={S.inlineCode}>ngrok-skip-browser-warning: 69420</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderFirmwareSrc = () => (
+    <div>
+      <h2 id="code-block" style={S.sectionTitle}>
+        Firmware C++ (ESP32) — v2.2
+      </h2>
+      <p style={S.bodyText}>
+        Codigo fuente completo del archivo <code style={S.inlineCode}>esp32-telemetry.ino</code>.
+        Incluye promedio movil de 20 muestras, reconexion WiFi automatica, indicadores LED de estado, y envio HTTP POST con header ngrok.
+      </p>
+      <div style={S.codeWrap}>
         <div style={S.codeHeader}>
           <span style={S.codeFilename}>esp32-telemetry.ino</span>
           <button style={S.copyBtn(copied)} onClick={handleCopy}>
             {copied ? "Copiado" : "Copiar"}
           </button>
         </div>
-        <pre style={S.pre}>
+        <pre style={{ ...S.pre, maxHeight: 600 }}>
           <code>{cppCode}</code>
         </pre>
       </div>
+
+      <h3 style={S.sectionSubtitle}>Formulas de Conversion</h3>
+      <div style={{ overflowX: "auto" }}>
+        <table style={S.table}>
+          <thead>
+            <tr>
+              <th style={S.th}>Sensor</th>
+              <th style={S.th}>Formula</th>
+              <th style={S.th}>Unidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              ["TDS", "(voltage / 2.3) \u00d7 1000", "ppm"],
+              ["Turbidez", "(1.0 - voltage / 3.3) \u00d7 100", "NTU"],
+              ["Nivel", "((tankH - d) / (tankH - sensorOff)) \u00d7 100", "%"],
+            ].map(([sensor, formula, unit], i) => (
+              <tr key={i}>
+                <td style={S.tdBold(i % 2 === 1)}>{sensor}</td>
+                <td style={S.tdMono(i % 2 === 1)}>{formula}</td>
+                <td style={S.td(i % 2 === 1)}>{unit}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p style={{ fontSize: "0.78rem", color: "hsl(var(--text-dim))", marginTop: "8px" }}>
+        Donde <code style={S.inlineCode}>voltage = ADC \u00d7 (3.3 / 4095.0)</code>, <code style={S.inlineCode}>tankH = 200 cm</code>, <code style={S.inlineCode}>sensorOff = 10 cm</code>, <code style={S.inlineCode}>d = pulseIn \u00d7 0.01715 cm</code>.
+      </p>
     </div>
   );
 
@@ -991,12 +1379,189 @@ export default function OpenSourceDocs() {
     </div>
   );
 
+  const renderJoinCommunity = () => (
+    <div>
+      <h2 id="postulate-comm" style={S.sectionTitle}>
+        Queremos ser Comunidad
+      </h2>
+      <p style={S.bodyText}>
+        ¿Tu comunidad rural necesita acceso a agua potable y monitoreo inteligente de calidad? 
+        Postula a tu vereda o cabildo para recibir acompañamiento hídrico de la Fundación Ábaco y financiamiento tecnológico para filtros AQUORA.
+      </p>
+
+      <div style={S.formCard}>
+        {commSuccess ? (
+          <div style={S.successBox}>
+            <h4
+              style={{
+                color: "hsl(var(--teal-success))",
+                fontFamily: "var(--font-label)",
+                fontWeight: 700,
+                fontSize: "1rem",
+                margin: 0,
+              }}
+            >
+              Postulación Registrada
+            </h4>
+            <p
+              style={{
+                color: "hsl(var(--text-secondary))",
+                fontSize: "0.85rem",
+                lineHeight: 1.5,
+                margin: 0,
+              }}
+            >
+              La postulación de tu comunidad ha sido recibida correctamente por el equipo staff de Ábaco.
+            </p>
+            <div style={S.keyDisplay}>POSTULACIÓN RECIBIDA</div>
+            <small
+              style={{
+                color: "hsl(var(--sky))",
+                fontSize: "0.75rem",
+                lineHeight: 1.4,
+              }}
+            >
+              <strong>Próximo paso:</strong> El personal técnico programará una visita diagnóstica territorial para verificar las fuentes de agua locales.
+            </small>
+            <button
+              style={{
+                ...S.submitBtn(false),
+                background: "transparent",
+                border: "1px solid hsl(var(--border-active))",
+                marginTop: "var(--space-xs)",
+              }}
+              onClick={() => setCommSuccess(false)}
+            >
+              Postular Otra Comunidad
+            </button>
+          </div>
+        ) : (
+          <form
+            onSubmit={handleRequestCommunity}
+            style={{ display: "flex", flexDirection: "column", gap: "var(--space-sm)" }}
+          >
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-sm)" }}>
+              <div>
+                <label style={S.formLabel}>Nombre del Líder / Comunidad</label>
+                <input
+                  type="text"
+                  style={S.formInput}
+                  value={commName}
+                  onChange={(e) => setCommName(e.target.value)}
+                  placeholder="Líder Comunitario o Cabildo"
+                  required
+                />
+              </div>
+              <div>
+                <label style={S.formLabel}>Correo Electrónico de Contacto</label>
+                <input
+                  type="email"
+                  style={S.formInput}
+                  value={commEmail}
+                  onChange={(e) => setCommEmail(e.target.value)}
+                  placeholder="ejemplo@correo.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "var(--space-sm)" }}>
+              <div>
+                <label style={S.formLabel}>Departamento</label>
+                <select
+                  style={S.formSelect}
+                  value={selectedDept}
+                  onChange={(e) => setSelectedDept(e.target.value)}
+                  required
+                >
+                  {Object.keys(locationsMap).map((dept) => (
+                    <option key={dept} value={dept} style={{ background: "#14293a", color: "#E8F4FF" }}>
+                      {dept}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label style={S.formLabel}>Municipio</label>
+                <select
+                  style={S.formSelect}
+                  value={selectedMuni}
+                  onChange={(e) => setSelectedMuni(e.target.value)}
+                  required
+                >
+                  {municipalities.map((muni) => (
+                    <option key={muni} value={muni} style={{ background: "#14293a", color: "#E8F4FF" }}>
+                      {muni}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label style={S.formLabel}>Corregimiento / Sector</label>
+                <input
+                  type="text"
+                  style={S.formInput}
+                  value={commCorregimiento}
+                  onChange={(e) => setCommCorregimiento(e.target.value)}
+                  placeholder="Ej: El Pájaro"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label style={S.formLabel}>Descripción del Territorio y Problemática</label>
+              <textarea
+                style={{
+                  ...S.formInput,
+                  minHeight: "80px",
+                  resize: "vertical",
+                }}
+                value={commDesc}
+                onChange={(e) => setCommDesc(e.target.value)}
+                placeholder="Por favor describe brevemente el número de familias y el estado actual de tu fuente de agua."
+                required
+              />
+            </div>
+
+            {commError && (
+              <div
+                style={{
+                  color: "hsl(var(--danger))",
+                  fontSize: "0.8rem",
+                  lineHeight: 1.4,
+                }}
+              >
+                {commError}
+              </div>
+            )}
+
+            <button type="submit" style={S.submitBtn(commLoading)} disabled={commLoading}>
+              {commLoading ? "Enviando Postulación..." : "Enviar Postulación de Comunidad"}
+            </button>
+          </form>
+        )}
+      </div>
+
+      <h3 id="support-info" style={S.sectionSubtitle}>
+        Programa de Acompañamiento Hídrico
+      </h3>
+      <p style={S.bodyText}>
+        Ábaco apoya a las comunidades mediante la entrega sin costo de purificadores orgánicos modulares equipados con telemetría IoT de bajo consumo. 
+        Además, capacitamos a la comunidad en la autogestión de repuestos y monitoreo preventivo de salud del agua.
+      </p>
+    </div>
+  );
+
   // ── Map active tab → render function ───────────────
   const contentMap = {
     overview: renderOverview,
     "link-device": renderLinkDevice,
-    hardware: renderHardware,
-    code: renderCode,
+    "join-community": renderJoinCommunity,
+    bom: renderBom,
+    pinout: renderPinout,
+    "arduino-setup": renderArduinoSetup,
+    "firmware-src": renderFirmwareSrc,
     faq: renderFaq,
   };
 

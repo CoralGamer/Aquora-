@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import FilterViewer3D from "./FilterViewer3D";
 
 export default function LandingPage({ onNavigate }) {
   const [activeSlide, setActiveSlide] = useState(0);
@@ -509,7 +510,7 @@ export default function LandingPage({ onNavigate }) {
           FILTER CARDS SECTION — Capas del Filtro
           ═══════════════════════════════════════════ */}
       <section style={{
-        padding: 'clamp(2rem, 5vw, 6rem) clamp(1.5rem, 4vw, 6rem) clamp(3rem, 6vw, 9rem)',
+        padding: 'clamp(2rem, 5vw, 6rem) clamp(1.5rem, 4vw, 6rem) clamp(1.5rem, 3vw, 2.5rem)',
         background: 'hsl(var(--bg-base))',
         width: '100%',
       }}>
@@ -657,6 +658,187 @@ export default function LandingPage({ onNavigate }) {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          APP DOWNLOAD SECTION — Premium Glassmorphic Call to Action
+          ═══════════════════════════════════════════ */}
+      <section id="download-app" style={{
+        padding: 'clamp(3rem, 6vw, 6rem) clamp(1.5rem, 4vw, 6rem)',
+        background: 'linear-gradient(to bottom, hsl(var(--bg-base)), hsla(var(--bg-surface) / 0.3))',
+        borderTop: '1px solid hsla(var(--border) / 0.2)',
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <div className="card-static" style={{
+          maxWidth: '960px',
+          width: '100%',
+          background: 'linear-gradient(135deg, hsla(var(--bg-surface) / 0.7) 0%, hsla(var(--bg-base) / 0.9) 100%)',
+          border: '1px solid hsla(var(--sky) / 0.15)',
+          borderRadius: 'var(--radius-lg)',
+          padding: 'clamp(2rem, 4vw, 4rem)',
+          boxShadow: 'var(--shadow-float)',
+          display: 'grid',
+          gridTemplateColumns: '1.2fr 0.8fr',
+          gap: 'var(--space-xl)',
+          alignItems: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+        }}>
+          {/* Subtle watermark background circles */}
+          <div style={{
+            position: 'absolute',
+            width: '300px',
+            height: '300px',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, hsla(var(--sky) / 0.05) 0%, transparent 70%)',
+            top: '-50px',
+            right: '-50px',
+            zIndex: 1,
+            pointerEvents: 'none'
+          }} />
+
+          {/* Left Column: Copy */}
+          <div style={{ position: 'relative', zIndex: 2 }}>
+            <span className="section-label" style={{ color: 'hsl(var(--peach))', marginBottom: '0.5rem', display: 'inline-block' }}>
+              MONITOREO EN LA PALMA DE TU MANO
+            </span>
+            <h2 style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '2.5rem',
+              color: 'hsl(var(--text-primary))',
+              lineHeight: 1.15,
+              fontWeight: 700,
+              letterSpacing: '-0.02em',
+              marginBottom: '1rem'
+            }}>
+              Descarga nuestra app, disponible en Android y iOS
+            </h2>
+            <p style={{
+              fontFamily: 'var(--font-ui)',
+              color: 'hsl(var(--text-secondary))',
+              fontSize: '1rem',
+              lineHeight: 1.65,
+              marginBottom: '1.5rem'
+            }}>
+              Lleva el control de calidad del agua y reporta incidencias de turbidez, sequedad o averías físicas directamente desde el territorio, incluso en zonas rurales sin cobertura móvil gracias a nuestra tecnología offline integrada.
+            </p>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              color: 'hsl(var(--success))',
+              fontSize: '0.85rem',
+              fontWeight: '600'
+            }}>
+              <span className="pulse-indicator" style={{ width: '8px', height: '8px' }}></span>
+              <span>Sincronización híbrida fuera de línea y escaneo QR incluidos</span>
+            </div>
+          </div>
+
+          {/* Right Column: Download Buttons */}
+          <div style={{
+            position: 'relative',
+            zIndex: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1.25rem',
+            justifyContent: 'center',
+            alignItems: 'stretch'
+          }}>
+            {/* Android Download Button */}
+            <a 
+              href="https://github.com/CoralGamer/SerendipIA---Creathon-Ignia/raw/main/mobile/builds/aquora-comunidad.apk" 
+              className="btn btn-primary"
+              style={{
+                padding: '1rem 1.5rem',
+                fontSize: '1rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.75rem',
+                borderRadius: 'var(--radius-md)',
+                backgroundColor: 'hsl(var(--ocean))',
+                borderColor: 'hsl(var(--ocean))',
+                textDecoration: 'none'
+              }}
+            >
+              <svg viewBox="0 0 24 24" style={{ width: '24px', height: '24px', fill: 'currentColor' }}>
+                <path d="M4.19 14.88c-.6-.18-1-.73-1-1.38V9.5c0-.65.4-1.2 1-1.38V14.88zM20.81 8.12c.6.18 1 .73 1 1.38v4c0 .65-.4 1.2-1 1.38V8.12zM7 16h10v1c0 .55-.45 1-1 1h-8c-.55 0-1-.45-1-1v-1zm4.84-11.83c-.31-.41-.85-.5-1.26-.19a.9.9 0 0 0-.19 1.26l1.35 1.76H7c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h10c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1h-4.74l1.35-1.76c.31-.41.22-.95-.19-1.26a.91.91 0 0 0-.58-.08zm.16 5.83c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-4 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z" />
+              </svg>
+              <div style={{ textAlign: 'left' }}>
+                <span style={{ fontSize: '0.75rem', opacity: 0.8, display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Disponible para Android</span>
+                <span style={{ fontWeight: 'bold', fontSize: '1.05rem' }}>Descargar APK (.apk)</span>
+              </div>
+            </a>
+
+            {/* iOS Download Button */}
+            <a 
+              href="#" 
+              onClick={(e) => {
+                e.preventDefault();
+                alert("Instalación de iOS:\n\nEl instalador corporativo iOS (.ipa) para el piloto comunal de AQUORA puede descargarse desde la carpeta /mobile/builds/ en el repositorio. Para instalar en dispositivos Apple en fase de pruebas:\n\n1. Registre el UUID de su dispositivo en la consola de Apple Developer.\n2. Instale mediante Cydia Impactor o Xcode.");
+              }}
+              className="btn btn-secondary"
+              style={{
+                padding: '1rem 1.5rem',
+                fontSize: '1rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.75rem',
+                borderRadius: 'var(--radius-md)',
+                textDecoration: 'none'
+              }}
+            >
+              <svg viewBox="0 0 24 24" style={{ width: '24px', height: '24px', fill: 'currentColor' }}>
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-.96.04-2.13.64-2.82 1.45-.6.68-1.12 1.82-.98 2.92.1.08.2.12.3.12.87 0 1.97-.57 2.51-1.43z" />
+              </svg>
+              <div style={{ textAlign: 'left' }}>
+                <span style={{ fontSize: '0.75rem', opacity: 0.8, display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Disponible para iOS</span>
+                <span style={{ fontWeight: 'bold', fontSize: '1.05rem' }}>Descargar iOS (.ipa)</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          PUBLIC 3D FILTER VIEWER SECTION
+          ═══════════════════════════════════════════ */}
+      <section style={{
+        padding: 'clamp(2rem, 5vw, 6rem) clamp(1.5rem, 4vw, 6rem) clamp(3rem, 6vw, 9rem)',
+        background: 'hsl(var(--bg-base))',
+        borderTop: '1px solid hsla(var(--border) / 0.3)',
+        width: '100%',
+      }}>
+        <div style={{ maxWidth: '800px', marginBottom: 'var(--space-xl)' }}>
+          <span className="section-label">
+            EXPLORACIÓN TÉCNICA E INTERACTIVA
+          </span>
+          <h2 style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '2.25rem',
+            color: 'hsl(var(--text-primary))',
+            lineHeight: 1.15,
+            marginTop: 'var(--space-xs)',
+          }}>
+            Desarmado del Purificador en 3D
+          </h2>
+          <p style={{
+            fontFamily: 'var(--font-ui)',
+            color: 'hsl(var(--text-secondary))',
+            fontSize: '1rem',
+            lineHeight: 1.65,
+            marginTop: 'var(--space-sm)',
+          }}>
+            Mueve el deslizador para ver la estructura interna por capas biológicas y el posicionamiento de los componentes de telemetría IoT. Cualquier visitante puede interactuar directamente con nuestro diseño abierto.
+          </p>
+        </div>
+
+        <FilterViewer3D />
       </section>
 
     </div>

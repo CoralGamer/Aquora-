@@ -61,8 +61,18 @@ export default function UserProfile({ userProfile, onLogout }) {
           <div>
             <span style={{ fontSize: "0.75rem", color: "hsl(var(--text-dark))", textTransform: "uppercase", fontWeight: "bold" }}>Rol asignado</span>
             <div style={{ marginTop: "0.25rem" }}>
-              <span className={`badge ${userProfile.role === "admin" ? "badge-danger" : "badge-success"}`}>
-                {userProfile.role === "admin" ? "Administrador Ábaco" : "Miembro de la Comunidad"}
+              <span className={`badge ${
+                userProfile.role === "super_admin" 
+                  ? "badge-danger" 
+                  : (userProfile.role === "abaco_staff" || userProfile.role === "admin") 
+                    ? "badge-warning" 
+                    : "badge-success"
+              }`}>
+                {userProfile.role === "super_admin" 
+                  ? "Administrador AQUORA" 
+                  : (userProfile.role === "abaco_staff" || userProfile.role === "admin") 
+                    ? "Administrador Ábaco" 
+                    : "Miembro de la Comunidad"}
               </span>
             </div>
           </div>

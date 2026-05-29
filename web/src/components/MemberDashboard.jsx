@@ -15,6 +15,9 @@ export default function MemberDashboard({ userProfile, getApiUrl }) {
   const [savingPrefs, setSavingPrefs] = useState(false);
   const [prefSuccess, setPrefSuccess] = useState(false);
 
+  const [communityDevices, setCommunityDevices] = useState([]);
+  const [selectedDevice, setSelectedDevice] = useState(null);
+
   // Fetch telemetry data for the user's specific filter device
   const fetchTelemetry = async () => {
     if (!userProfile.device_id) {
@@ -25,36 +28,67 @@ export default function MemberDashboard({ userProfile, getApiUrl }) {
     try {
       setLoading(true);
       
-      // 1. Fetch device key information
-      const { data: devData, error: devErr } = await supabase
+      // 1. Fetch primary device information to get its community_id
+      const { data: primaryDev, error: devErr } = await supabase
         .from("devices")
-        .select("id, device_key, active")
+        .select("id, device_key, active, community_id")
         .eq("id", userProfile.device_id)
         .single();
 
       if (devErr) throw devErr;
-      setDevice(devData);
+      
+      // 2. Fetch all devices sharing that community_id
+      let allCommDevs = [primaryDev];
+      if (primaryDev.community_id) {
+        const { data: commDevs } = await supabase
+          .from("devices")
+          .select("id, device_key, active, community_id")
+          .eq("community_id", primaryDev.community_id);
+        
+        if (commDevs && commDevs.length > 0) {
+          // Deduplicate and set
+          const devIds = new Set();
+          allCommDevs = [];
+          [primaryDev, ...commDevs].forEach(d => {
+            if (!devIds.has(d.id)) {
+              devIds.add(d.id);
+              allCommDevs.push(d);
+            }
+          });
+        }
+      }
+      
+      setCommunityDevices(allCommDevs);
+      
+      // Use currently selected device, or default to primary device
+      const targetDev = selectedDevice || primaryDev;
+      if (!selectedDevice) {
+        setSelectedDevice(targetDev);
+      }
+      setDevice(targetDev);
 
-      // 2. Fetch latest telemetry reading
+      // 3. Fetch latest telemetry reading for the target device
       const { data: readData, error: readErr } = await supabase
         .from("sensor_readings")
         .select("tds_ppm, turbidity_ntu, water_level_pct, timestamp")
-        .eq("device_id", userProfile.device_id)
+        .eq("device_id", targetDev.id)
         .order("timestamp", { ascending: false })
         .limit(1);
 
       if (!readErr && readData && readData.length > 0) {
         setLatestReading(readData[0]);
+      } else {
+        setLatestReading(null);
       }
 
-      // 3. Fetch history for Recharts via the backend API securely
+      // 4. Fetch history for the target device
       const apiUrl = getApiUrl();
       const headers = {};
       if (apiUrl.includes("ngrok")) {
         headers["ngrok-skip-browser-warning"] = "true";
       }
 
-      const res = await fetch(`${apiUrl}/api/v1/readings/history/${userProfile.device_id}`, { headers });
+      const res = await fetch(`${apiUrl}/api/v1/readings/history/${targetDev.id}`, { headers });
       if (res.ok) {
         const json = await res.json();
         setHistoryData(json);
@@ -63,7 +97,7 @@ export default function MemberDashboard({ userProfile, getApiUrl }) {
         const { data: histData } = await supabase
           .from("sensor_readings")
           .select("tds_ppm, turbidity_ntu, water_level_pct, timestamp")
-          .eq("device_id", userProfile.device_id)
+          .eq("device_id", targetDev.id)
           .order("timestamp", { ascending: false })
           .limit(20);
         
@@ -75,6 +109,8 @@ export default function MemberDashboard({ userProfile, getApiUrl }) {
             level: row.water_level_pct
           })).reverse();
           setHistoryData(formatted);
+        } else {
+          setHistoryData([]);
         }
       }
 
@@ -95,7 +131,7 @@ export default function MemberDashboard({ userProfile, getApiUrl }) {
       setTdsThreshold(prefs.tds_threshold || 400);
       setTurbThreshold(prefs.turbidity_threshold || 5.0);
     }
-  }, [userProfile]);
+  }, [userProfile, selectedDevice?.id]);
 
   // Handle saving user notification preferences in Supabase JSONB column
   const handleSavePreferences = async (e) => {
@@ -199,17 +235,51 @@ export default function MemberDashboard({ userProfile, getApiUrl }) {
         
         {/* Left Card: Dynamic Gauges / Sensor Data */}
         <div className="card" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid hsl(var(--border-light))", paddingBottom: "1rem" }}>
-            <div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: "1px solid hsl(var(--border-light))", paddingBottom: "1rem", flexWrap: "wrap", gap: "1rem" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem", minWidth: "200px" }}>
               <h3 style={{ fontFamily: "var(--font-title)", fontSize: "1.35rem", color: "hsl(var(--text-main))", margin: 0 }}>
                 🪣 Telemetría Familiar en Vivo
               </h3>
-              <p style={{ color: "hsl(var(--text-dark))", fontSize: "0.8rem", marginTop: "0.25rem" }}>
+              <p style={{ color: "hsl(var(--text-dark))", fontSize: "0.8rem", margin: 0 }}>
                 Identificador del Dispositivo: <code style={{ color: "hsl(var(--primary))", fontFamily: "monospace" }}>{device?.device_key}</code>
               </p>
+
+              {/* Selector for multi-filter community devices */}
+              {communityDevices.length > 1 && (
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.5rem" }}>
+                  <label style={{ fontSize: "0.75rem", color: "hsl(var(--text-muted))", fontWeight: "bold" }}>
+                    🔄 Cambiar Filtro:
+                  </label>
+                  <select
+                    value={selectedDevice?.id || ""}
+                    onChange={(e) => {
+                      const dev = communityDevices.find(d => d.id === e.target.value);
+                      if (dev) {
+                        setSelectedDevice(dev);
+                      }
+                    }}
+                    style={{
+                      padding: "0.2rem 0.4rem",
+                      fontSize: "0.75rem",
+                      background: "rgba(15, 23, 42, 0.9)",
+                      border: "1px solid rgba(173, 219, 255, 0.15)",
+                      borderRadius: "4px",
+                      color: "hsl(var(--text-main))",
+                      cursor: "pointer",
+                      fontFamily: "monospace"
+                    }}
+                  >
+                    {communityDevices.map(d => (
+                      <option key={d.id} value={d.id} style={{ background: "#0f172a", color: "#f8fafc" }}>
+                        {d.device_key} {d.id === userProfile.device_id ? "(Principal)" : ""}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
             
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", background: "rgba(16, 185, 129, 0.08)", padding: "0.4rem 0.8rem", borderRadius: "30px", border: "1px solid rgba(16, 185, 129, 0.2)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", background: "rgba(16, 185, 129, 0.08)", padding: "0.4rem 0.8rem", borderRadius: "30px", border: "1px solid rgba(16, 185, 129, 0.2)", height: "fit-content" }}>
               <span className="pulse-indicator"></span>
               <span style={{ fontSize: "0.75rem", color: "hsl(var(--success))", fontWeight: "bold" }}>EN LÍNEA</span>
             </div>

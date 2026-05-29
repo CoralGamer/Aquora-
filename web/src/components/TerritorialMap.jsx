@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -50,7 +50,7 @@ export default function TerritorialMap({ onSelectCommunity, selectedCommunityId 
         setLoading(false);
         // Proactively select the first community if none is selected
         if (json.length > 0 && !selectedCommunityId) {
-          onSelectCommunity(json[0].community_id, json[0].name);
+          onSelectCommunity(json[0].community_id, json[0].name, json[0].latitude, json[0].longitude);
         }
       })
       .catch((err) => {
@@ -62,6 +62,11 @@ export default function TerritorialMap({ onSelectCommunity, selectedCommunityId 
 
   useEffect(() => {
     fetchHeatmapData();
+    // Auto-refresh every 30 seconds for live telemetry
+    const interval = setInterval(() => {
+      fetchHeatmapData();
+    }, 30000);
+    return () => clearInterval(interval);
   }, [apiUrl]);
 
   // Handle saving the API URL with automatic protocol correction
@@ -214,13 +219,13 @@ export default function TerritorialMap({ onSelectCommunity, selectedCommunityId 
                 style={{ transition: "all 0.3s ease" }}
               >
                 <Popup minWidth={240}>
-                  <div style={{ fontFamily: "var(--font-body)", color: "#1e293b", fontSize: "0.85rem", lineHeight: "1.5" }}>
-                    <h4 style={{ fontFamily: "var(--font-title)", fontWeight: 800, fontSize: "1.1rem", borderBottom: "1px solid #e2e8f0", paddingBottom: "0.5rem", marginBottom: "0.5rem", color: "#0f172a" }}>
+                  <div style={{ fontFamily: "var(--font-body)", color: "hsl(var(--text-primary))", fontSize: "0.85rem", lineHeight: "1.5" }}>
+                    <h4 style={{ fontFamily: "var(--font-title)", fontWeight: 800, fontSize: "1.1rem", borderBottom: "1px solid hsl(var(--border))", paddingBottom: "0.5rem", marginBottom: "0.5rem", color: "hsl(var(--text-primary))" }}>
                       📍 {comm.name}
                     </h4>
                     
                     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.5rem" }}>
-                      <strong style={{ color: "#475569" }}>Riesgo Sanitario:</strong>
+                      <strong style={{ color: "hsl(var(--text-secondary))" }}>Riesgo Sanitario:</strong>
                       <span style={{ 
                         display: "inline-block", 
                         padding: "0.15rem 0.5rem", 
@@ -234,22 +239,22 @@ export default function TerritorialMap({ onSelectCommunity, selectedCommunityId 
                       </span>
                     </div>
 
-                    <p style={{ margin: "0.25rem 0" }}>🧪 <strong>TDS:</strong> {comm.current_tds_ppm.toFixed(1)} ppm</p>
-                    <p style={{ margin: "0.25rem 0" }}>💧 <strong>Turbidez:</strong> {comm.current_turbidity_ntu.toFixed(2)} NTU</p>
-                    <p style={{ margin: "0.25rem 0" }}>🪣 <strong>Volumen Nivel:</strong> {comm.current_water_level_pct.toFixed(1)}%</p>
-                    <p style={{ margin: "0.25rem 0" }}>😷 <strong>Casos EDA Históricos:</strong> {comm.average_eda_cases.toFixed(1)} / sem</p>
+                    <p style={{ margin: "0.25rem 0", color: "hsl(var(--text-secondary))" }}>🧪 <strong style={{ color: "hsl(var(--text-primary))" }}>TDS:</strong> {comm.current_tds_ppm.toFixed(1)} ppm</p>
+                    <p style={{ margin: "0.25rem 0", color: "hsl(var(--text-secondary))" }}>💧 <strong style={{ color: "hsl(var(--text-primary))" }}>Turbidez:</strong> {comm.current_turbidity_ntu.toFixed(2)} NTU</p>
+                    <p style={{ margin: "0.25rem 0", color: "hsl(var(--text-secondary))" }}>🪣 <strong style={{ color: "hsl(var(--text-primary))" }}>Volumen Nivel:</strong> {comm.current_water_level_pct.toFixed(1)}%</p>
+                    <p style={{ margin: "0.25rem 0", color: "hsl(var(--text-secondary))" }}>😷 <strong style={{ color: "hsl(var(--text-primary))" }}>Casos EDA Históricos:</strong> {comm.average_eda_cases.toFixed(1)} / sem</p>
                     
-                    <div style={{ fontSize: "0.7rem", color: "#64748b", borderTop: "1px solid #f1f5f9", marginTop: "0.5rem", paddingTop: "0.4rem" }}>
-                      Última señal: {comm.last_update !== "Sin datos" ? new Date(comm.last_update).toLocaleTimeString() : "Nunca"}
+                    <div style={{ fontSize: "0.7rem", color: "hsl(var(--text-dim))", borderTop: "1px solid hsl(var(--border))", marginTop: "0.5rem", paddingTop: "0.4rem" }}>
+                      Última señal: {comm.last_update !== "Sin datos" ? (() => { const d = new Date(comm.last_update); return `${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}:${String(d.getSeconds()).padStart(2,"0")}`; })() : "Nunca"}
                     </div>
 
                     <button 
-                      onClick={() => onSelectCommunity(comm.community_id, comm.name)}
+                      onClick={() => onSelectCommunity(comm.community_id, comm.name, comm.latitude, comm.longitude)}
                       style={{ 
                         marginTop: "0.75rem", 
                         width: "100%", 
                         padding: "0.5rem", 
-                        background: "#0ea5e9", 
+                        background: "hsl(var(--ocean))", 
                         color: "#ffffff", 
                         border: "none", 
                         borderRadius: "6px", 
@@ -258,8 +263,8 @@ export default function TerritorialMap({ onSelectCommunity, selectedCommunityId 
                         cursor: "pointer",
                         transition: "background 0.2s"
                       }}
-                      onMouseOver={(e) => e.target.style.background = "#0284c7"}
-                      onMouseOut={(e) => e.target.style.background = "#0ea5e9"}
+                      onMouseOver={(e) => e.target.style.background = "hsl(var(--sky))"}
+                      onMouseOut={(e) => e.target.style.background = "hsl(var(--ocean))"}
                     >
                       📊 Ver Análisis Histórico
                     </button>
