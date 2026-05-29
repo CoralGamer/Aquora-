@@ -1,21 +1,41 @@
 // ============================================================
-// AQUORA - FIRMWARE DE TELEMETRÍA v2.2 (HTTP Plano)
+// AQUORA - FIRMWARE DE TELEMETRÍA v2.3 (HTTPS via ngrok)
 // ============================================================
 // Simulación en Wokwi con ESP32 DevKit-C v4
 // Sensores: TDS (pot), Turbidez (pot), Nivel (HC-SR04)
-// Conectividad: WiFi → HTTP POST a API REST via ngrok
+// Conectividad: WiFi → HTTPS POST a API REST via ngrok
 // ============================================================
 
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <WiFiClientSecure.h>
 
 // --- CONFIGURACIÓN DE RED ---
 const char* ssid     = "Wokwi-GUEST";
 const char* password = "";
 
-// --- ENDPOINT API (HTTP plano, sin HTTPS) ---
-const char* serverURL = "http://crabmeat-blustery-kitty.ngrok-free.dev/api/v1/readings";
-const String deviceKey = "DEV_ESP32_GUAF1";
+// --- ENDPOINT API (HTTPS — ngrok requiere TLS) ---
+const char* serverURL = "https://crabmeat-blustery-kitty.ngrok-free.dev/api/v1/readings";
+
+// =========================================================================================
+// 🔑 ------------------ ZONA DE CONFIGURACIÓN DE LA CLAVE DE API ------------------ 🔑
+// =========================================================================================
+// ⚠️ ¡IMPORTANTE PARA LA CONEXIÓN! ⚠️
+// 
+// Coloca aquí la "Clave de API de Firmware" asignada a tu purificador.
+// Esta clave se obtiene en la interfaz web de AQUORA (Panel de Aprovisionamiento) al
+// autorizar una solicitud o ver los detalles de los "Dispositivos Activos".
+//
+// FORMATO REQUERIDO:
+// - Debe comenzar con el prefijo: "aq_api_" (o "AQ_API_" - es indiferente, el backend es tolerante).
+// - Ejemplo de clave válida: "aq_api_88fd36f2e21b714b" o "AQ_API_88fd36f2e21b714b"
+//
+// Al encender el ESP32, si tiene conexión a Internet, enviará telemetría con este token.
+// El servidor validará la clave mediante un hashing seguro y asociará los datos al
+// dispositivo y comunidad correspondientes automáticamente.
+// =========================================================================================
+const String deviceKey = "aq_api_0cfcc1652f6f943e"; // <-- API KEY para DEV_ESP32_GUAFFRHE (Comunidad Palmor / Ciénaga)
+// =========================================================================================
 
 // --- PINES DE SENSORES ---
 const int pinTDS       = 34;   // Potenciómetro TDS → GPIO34 (ADC)
@@ -44,7 +64,7 @@ void setup() {
 
   Serial.println();
   Serial.println("=============================================");
-  Serial.println("   AQUORA SMART WATER MONITOR v2.2");
+  Serial.println("   AQUORA SMART WATER MONITOR v2.3");
   Serial.println("   Firmware de Telemetria - ESP32");
   Serial.println("=============================================");
   Serial.println();
@@ -199,12 +219,14 @@ float calcLevel() {
 // ==========================================
 
 void sendTelemetry(float tds, float turb, float level) {
+  WiFiClientSecure client;
+  client.setInsecure();  // Skip certificate validation (OK for dev/ngrok)
   HTTPClient http;
 
-  Serial.print("[HTTP] POST → ");
+  Serial.print("[HTTPS] POST → ");
   Serial.println(serverURL);
 
-  http.begin(serverURL);
+  http.begin(client, serverURL);
   http.setTimeout(10000);
   http.addHeader("Content-Type", "application/json");
   http.addHeader("ngrok-skip-browser-warning", "69420");
