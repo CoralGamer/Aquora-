@@ -1,0 +1,125 @@
+================================================================================
+                    AQUORA - INICIALIZADOR DE DESARROLLO
+================================================================================
+
+Este documento contiene las instrucciones precisas y detalladas para volver a
+inicializar todas las terminales y servicios del ecosistema AQUORA en tu máquina
+Windows. Al seguir estos pasos, podrás levantar cada componente y verificar que 
+todo el sistema esté operando al 100%.
+
+El ecosistema AQUORA consta de 4 componentes principales:
+1. Backend (FastAPI + Supabase)
+2. Frontend Web (Vite + React)
+3. Aplicación Móvil (React Native + Expo)
+4. Simulador de Hardware / Gemelo Digital (ESP32 + Wokwi)
+
+Sigue las instrucciones abajo para abrir e iniciar cada terminal.
+
+--------------------------------------------------------------------------------
+TERMINAL 1: BACKEND (FastAPI - API & IoT Ingestion)
+--------------------------------------------------------------------------------
+El backend gestiona la base de datos de Supabase, recibe la telemetría del ESP32,
+y sirve los datos al mapa de calor y a la aplicación móvil.
+
+Pasos para inicializar:
+1. Abre una nueva terminal en tu editor de código (o PowerShell / CMD).
+2. Asegúrate de estar en la raíz de la carpeta de backend:
+   > cd "e:\AQUORA\backend"
+
+3. OPCIÓN A (Recomendada y más rápida): Ejecutar directamente usando el Python del venv:
+   Si no quieres lidiar con políticas de ejecución de PowerShell ni activar nada:
+   > .\venv\bin\python main.py
+   (O alternativamente para uvicorn con recarga automática:)
+   > .\venv\bin\python -m uvicorn main:app --reload
+
+4. OPCIÓN B (Activando el entorno virtual):
+   - En PowerShell:
+     > .\venv\bin\Activate.ps1
+     (Si te da error de permisos/directivas, ejecuta primero: Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass)
+   - En Command Prompt (CMD):
+     > .\venv\bin\activate.bat
+   - En Git Bash:
+     > source venv/bin/activate
+   - Una vez activado el venv, ejecuta:
+     > python main.py
+
+5. Verificación:
+   - Abre tu navegador en: http://localhost:8000
+   - Deberías ver la respuesta JSON del estado de la API o la documentación interactiva 
+     de Swagger en: http://localhost:8000/docs
+   - Deja esta terminal abierta y corriendo en segundo plano.
+
+--------------------------------------------------------------------------------
+TERMINAL 2: PORTAL WEB & DASHBOARD (React + Vite)
+--------------------------------------------------------------------------------
+El portal web aloja la landing page de AQUORA, la documentación open source y el 
+Dashboard de Inteligencia Territorial con los mapas de calor de Leaflet.
+
+Pasos para inicializar:
+1. Abre una segunda terminal (o pestaña de terminal) en tu sistema.
+2. Navega a la carpeta de la aplicación web:
+   > cd "e:\AQUORA\web"
+3. Inicia el servidor de desarrollo de Vite con npm:
+   > npm run dev
+4. Verificación:
+   - Abre tu navegador en la dirección local indicada por la terminal, usualmente:
+     http://localhost:5173
+   - El portal web y el dashboard deberán estar completamente operativos y comunicándose
+     con el backend local (http://localhost:8000).
+   - Deja esta terminal abierta y corriendo.
+
+--------------------------------------------------------------------------------
+TERMINAL 3: APLICACIÓN MÓVIL (React Native + Expo)
+--------------------------------------------------------------------------------
+La aplicación móvil permite a la comunidad y a los operarios escanear el código QR,
+vincular sus filtros familiares, reportar incidencias e interactuar con el ecosistema.
+
+Pasos para inicializar:
+1. Abre una tercera terminal en tu máquina.
+2. Navega a la carpeta del proyecto mobile:
+   > cd "e:\AQUORA\mobile"
+3. Inicia el servidor de desarrollo de Expo:
+   > npm start
+   (O alternativamente: npx expo start)
+4. Opciones de Ejecución:
+   - Para probar en tu teléfono real (Recomendado): Descarga la aplicación "Expo Go" 
+     desde Google Play Store o Apple App Store, asegúrate de que tu computadora y tu 
+     celular estén conectados a la misma red WiFi, y escanea el código QR que 
+     aparece en la terminal con la cámara de tu celular.
+   - Para probar en Emulador de Android (si lo tienes instalado): Presiona la tecla "a".
+   - Para probar en Simulador de iOS (si usas Mac): Presiona la tecla "i".
+   - Para probar en Web: Presiona la tecla "w".
+5. Deja esta terminal abierta para poder recargar y ver los logs de tu aplicación.
+
+--------------------------------------------------------------------------------
+TERMINAL 4: GEMELO DIGITAL / HARDWARE SIMULADO (ESP32 + Wokwi)
+--------------------------------------------------------------------------------
+El gemelo digital en Wokwi simula los sensores físicos de TDS, turbidez y nivel de 
+agua, y transmite telemetría en tiempo real al backend para alimentar el mapa de calor.
+
+Pasos para inicializar:
+1. Simulación en VS Code (Si tienes la extensión de Wokwi instalada):
+   - Abre tu proyecto principal en VS Code.
+   - Presiona Ctrl+Shift+P (o F1) para abrir la paleta de comandos.
+   - Escribe y selecciona: "Wokwi: Start Simulator"
+   - Esto abrirá la simulación interactiva del circuito dentro de VS Code usando
+     el archivo "diagram.json" y el firmware "esp32-telemetry.ino" ubicados en:
+     e:\AQUORA\hardware\esp32-telemetry\
+2. Simulación en la Web de Wokwi (Alternativa más rápida si no tienes la extensión):
+   - Puedes ir a https://wokwi.com
+   - Importar o arrastrar el archivo "project_Wokwi.zip" que se encuentra en la raíz
+     de tu proyecto (e:\AQUORA\project_Wokwi.zip) directo a tu panel de Wokwi.
+   - O bien, crea un proyecto de ESP32 en Wokwi, y copia y pega:
+     * El contenido de "esp32-telemetry.ino" en la pestaña de código.
+     * El contenido de "diagram.json" en la pestaña de diagrama.
+3. Asegúrate de configurar la dirección IP en el archivo "esp32-telemetry.ino" si estás
+   probando en un entorno local de red real, cambiando "YOUR_API_IP_OR_DOMAIN" por tu
+   IP local (ej. 192.168.x.x) para que el ESP32 simulado pueda comunicarse con tu backend.
+4. Presiona el botón verde de "Play" para arrancar la simulación. En la terminal serial 
+   verás cómo se conecta a la red virtual "Wokwi-GUEST" y comienza a enviar datos de
+   telemetría a tu API FastAPI de forma automática cada 15 segundos.
+
+================================================================================
+   ¡Listo! Con estas 4 terminales activas tendrás todo el ecosistema AQUORA
+   corriendo perfectamente sincronizado en tiempo real. ¡Feliz desarrollo!
+================================================================================
