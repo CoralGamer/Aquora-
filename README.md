@@ -353,9 +353,9 @@ gantt
 ## 📄 Licencia y Propiedad Intelectual
 
 Este ecosistema ha sido desarrollado con pasión e ingeniería de alto impacto por el **Equipo AQUORA**:
-* **Nicolas Archila** - Lead Software Architecture & Fullstack Dev.
-* **Susan Pulido** - Product Manager, UX/UI Design & IoT Lead.
-* **Antigravity** - Agentic AI Coding Assistant (Google DeepMind Team).
+* **Nicolas Archila** - Lead Software Architecture & Fullstack Dev - Security.
+* **Susan Pulido** - Product Manager, UX/UI Design & IoT Idea Manager.
+* **Antigravity** - Agentic AI Coding Assistant deployment and pipelines (Google DeepMind Team).
 
 ### ⚠️ Restricciones de Uso y Licencia Comercial Estricta:
 * **Uso No Comercial y Educativo**: Se permite el uso, copia, modificación y distribución únicamente para fines no comerciales, educativos, de investigación, evaluación académica o presentación en hackathons.
