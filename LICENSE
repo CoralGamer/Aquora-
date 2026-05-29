@@ -1,29 +1,46 @@
 ================================================================================
-LICENCIA DE USO DE AQUORA & BUMPO (RESTRICCIÓN COMERCIAL ESTRICTA)
+LICENCIA DE USO DE AQUORA & BUMPO (EXCEPCIÓN DE FIRMWARE MIT)
 ================================================================================
 
 Copyright (c) 2026 AQUORA & Bumpo.com.co. Todos los derechos reservados.
 
-Por la presente, se otorga permiso para el uso, copia, modificación y distribución
-de este software, firmware, esquemas de hardware y documentación asociada
-únicamente para fines no comerciales, educativos, de investigación, evaluación
-académica o presentación en hackathons, sujeto a las siguientes condiciones:
+--------------------------------------------------------------------------------
+1. EXCEPCIÓN DE FIRMWARE ABIERTO (MIT LICENSE)
+--------------------------------------------------------------------------------
+El firmware de telemetría para el microcontrolador ESP32 (almacenado en
+`hardware/esp32-telemetry/esp32-telemetry.ino`) y la documentación física de 
+su conexionado están licenciados bajo la Licencia MIT. 
 
-1. PROHIBICIÓN ESTRICTA DE USO COMERCIAL: Queda terminantemente prohibido cualquier
-   uso comercial, explotación económica, comercialización, venta, distribución
-   con fines de lucro o sublicenciamiento de este software, firmware, diseños
-   de circuitos o material relacionado, sin la autorización previa, explícita y
-   por escrito de los titulares de los derechos: AQUORA o Bumpo.com.co.
+Por la presente, se otorga permiso sin restricciones a cualquier persona para
+usar, copiar, modificar, fusionar, publicar y distribuir dicho código de firmware,
+incluso para fines comerciales, sujeto únicamente a la inclusión del aviso de
+copyright original en todas las copias o partes sustanciales del mismo.
 
-2. AVISO DE DERECHOS DE AUTOR: El aviso de copyright anterior, esta declaración de
-   permisos y restricciones comerciales deben incluirse en todas las copias o
-   partes sustanciales del Software.
+--------------------------------------------------------------------------------
+2. RESTRICCIÓN COMERCIAL PARA EL RESTO DEL ECOSISTEMA
+--------------------------------------------------------------------------------
+Para todos los demás componentes de este repositorio (incluyendo, sin limitación,
+el código del backend en FastAPI, los esquemas relacionales de base de datos de
+Supabase PostgreSQL, la interfaz de la aplicación web React 18 / Vite, la
+aplicación móvil nativa React Native y los flujos automatizados de n8n), se otorga
+permiso de uso únicamente para fines no comerciales, educativos, de investigación,
+evaluación académica o presentación en hackathons, sujeto a las siguientes condiciones:
 
-3. SOLICITUD DE AUTORIZACIÓN COMERCIAL: Para solicitar licencias de explotación comercial,
-   derechos de distribución comercial o cualquier uso corporativo no autorizado por
-   esta licencia, póngase en contacto directamente con los titulares en:
-   - AQUORA
-   - Bumpo.com.co (https://bumpo.com.co)
+- PROHIBICIÓN ESTRICTA DE USO COMERCIAL: Queda terminantemente prohibido cualquier
+  uso comercial, explotación económica, comercialización, venta, distribución
+  con fines de lucro o sublicenciamiento de estos componentes protegidos sin la
+  autorización previa, explícita y por escrito de los titulares de los derechos:
+  AQUORA o Bumpo.com.co.
+
+- AVISO DE DERECHOS DE AUTOR: El aviso de copyright anterior, esta declaración de
+  permisos y restricciones comerciales deben incluirse en todas las copias o
+  partes sustanciales de estos componentes.
+
+- SOLICITUD DE AUTORIZACIÓN COMERCIAL: Para solicitar licencias de explotación comercial,
+  derechos de distribución comercial o cualquier uso corporativo no autorizado por
+  esta licencia, póngase en contacto directamente con los titulares en:
+  - AQUORA
+  - Bumpo.com.co (https://bumpo.com.co)
 
 EL SOFTWARE SE PROPORCIONA "TAL CUAL", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O
 IMPLÍCITA, INCLUYENDO PERO NO LIMITADO A GARANTÍAS DE COMERCIALIZACIÓN, IDONEIDAD

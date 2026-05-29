@@ -7,6 +7,7 @@
   <img src="https://img.shields.io/badge/Web-React%2018%20--%20Vite-blue.svg?style=for-the-badge&logo=react" alt="Web React">
   <img src="https://img.shields.io/badge/Mobile-React%20Native%20--%20Expo-lightblue.svg?style=for-the-badge&logo=react" alt="Mobile React Native">
   <img src="https://img.shields.io/badge/Licencia-Comercial%20Restringida-red.svg?style=for-the-badge" alt="Licencia Comercial Restringida">
+  <img src="https://img.shields.io/badge/Firmware%20License-MIT-gold.svg?style=for-the-badge" alt="Firmware License MIT">
 </p>
 
 ---
@@ -358,9 +359,10 @@ Este ecosistema ha sido desarrollado con pasión e ingeniería de alto impacto p
 * **Antigravity** - Agentic AI Coding Assistant deployment and pipelines (Google DeepMind Team).
 
 ### ⚠️ Restricciones de Uso y Licencia Comercial Estricta:
-* **Uso No Comercial y Educativo**: Se permite el uso, copia, modificación y distribución únicamente para fines no comerciales, educativos, de investigación, evaluación académica o presentación en hackathons.
-* **PROHIBICIÓN ESTRICTA DE USO COMERCIAL**: Queda **totalmente prohibido** el uso comercial, distribución con fines de lucro, sublicenciamiento o explotación económica de cualquier módulo de este ecosistema (firmware, esquemas de hardware, base de datos, backend, portal web o aplicación móvil) sin el consentimiento explícito, previo y por escrito de **AQUORA** o **Bumpo.com.co**.
-* Para consultas de licenciamiento y autorizaciones de explotación comercial, por favor contactar directamente a los titulares de los derechos o a través de [Bumpo.com.co](https://bumpo.com.co).
+* **Excepción de Firmware Abierto (MIT)**: El código fuente del **firmware para el microcontrolador ESP32** (`hardware/esp32-telemetry/esp32-telemetry.ino`) y la documentación física de su conexionado están bajo la **Licencia MIT**, permitiendo su libre uso, modificación y distribución (incluso para fines comerciales) para fomentar la replicación de purificadores hídricos comunitarios autoensamblados.
+* **Uso No Comercial para el Resto del Ecosistema**: Todos los demás componentes (backend en FastAPI, esquemas de base de datos de Supabase PostgreSQL, portal web React 18 / Vite, app móvil React Native y automatizaciones de n8n) se licencian exclusivamente para fines **no comerciales, educativos, de investigación, evaluación académica o presentación en hackathons**.
+* **PROHIBICIÓN ESTRICTA DE USO COMERCIAL**: Queda **totalmente prohibido** el uso comercial, distribución con fines de lucro, sublicenciamiento o explotación económica de estos componentes protegidos sin el consentimiento explícito, previo y por escrito de **AQUORA** o **Bumpo.com.co**.
+* Para consultas de licenciamiento y autorizaciones de explotación comercial de los componentes del ecosistema protegido, por favor contactar directamente a los titulares de los derechos o a través de [Bumpo.com.co](https://bumpo.com.co).
 
 Consulta el archivo [LICENSE](file:///e:/AQUORA/LICENSE) para ver los términos legales detallados y apreciar el arte ASCII corporativo del proyecto.
 
