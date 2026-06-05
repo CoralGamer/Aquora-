@@ -10,7 +10,7 @@ export default function LandingPage({ onNavigate }) {
       label: 'El Jagüey',
       title: 'La Crisis del Agua de Jagüey',
       desc: 'Las comunidades Wayúu dependen de pozos de agua cruda expuestos (jagüeyes) compartidos con la fauna local, acumulando sedimentos gruesos, parásitos y bacterias letales para el organismo infantil.',
-      img: '/assets/slide_jaguey.jpg',
+      img: './assets/slide_jaguey.jpg',
       fallback: 'https://images.unsplash.com/photo-1571401835393-8c5f35328320?q=80&w=1200'
     },
     {
@@ -18,7 +18,7 @@ export default function LandingPage({ onNavigate }) {
       label: 'Brote de EDA',
       title: 'El Nexo con las Enfermedades Diarreicas',
       desc: 'Las constantes infecciones estomacales (EDA) causan inflamación e impiden la absorción de los nutrientes. Proveer agua segura es el paso indispensable antes de nutrir.',
-      img: '/assets/slide_eda.jpg',
+      img: './assets/slide_eda.jpg',
       fallback: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1200'
     },
     {
@@ -26,7 +26,7 @@ export default function LandingPage({ onNavigate }) {
       label: 'Filtro Orgánico',
       title: 'Purificación Ecológica por Capas',
       desc: 'Un sistema pasivo descentralizado de filtración por gravedad que purifica el agua utilizando zeolita activa (intercambio iónico), bagazo de caña de azúcar (adsorción de metales) y arena silícea.',
-      img: '/assets/slide_filtro.jpg',
+      img: './assets/slide_filtro.jpg',
       fallback: 'https://images.unsplash.com/photo-1601524909162-be87252be298?q=80&w=1200'
     },
     {
@@ -34,7 +34,7 @@ export default function LandingPage({ onNavigate }) {
       label: 'Telemetría IoT',
       title: 'Vigilancia Sanitaria Activa en Tiempo Real',
       desc: 'Sensores de TDS, turbidez y volumen con un microcontrolador ESP32 transmiten datos en vivo a la nube para mapear el riesgo sanitario de forma predictiva mediante modelos de IA.',
-      img: '/assets/slide_telemetria.jpg',
+      img: './assets/slide_telemetria.jpg',
       fallback: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200'
     },
     {
@@ -42,7 +42,7 @@ export default function LandingPage({ onNavigate }) {
       label: 'Escalabilidad',
       title: 'Arquitectura Modular para el Territorio Expandido',
       desc: 'Nuestra arquitectura modular está diseñada para escalar exponencialmente. El cerebro electrónico del ESP32 y sus sensores analógicos pueden acoplarse no solo a jagüeyes, sino también a sistemas de captación de agua de lluvia, pozos profundos artesanales, tomas de acueductos veredales y tanques de distribución. Adaptamos dinámicamente los umbrales a cualquier tipología de fuente hídrica.',
-      img: '/assets/slide_escalabilidad.jpg',
+      img: './assets/slide_escalabilidad.jpg',
       fallback: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200'
     },
   ];
@@ -54,7 +54,7 @@ export default function LandingPage({ onNavigate }) {
       title: 'Bagazo de Caña',
       subtitle: 'Adsorbente molecular orgánico',
       desc: 'Retiene compuestos químicos, plaguicidas, olores y metales pesados de forma pasiva mediante microporosidades celulósicas renovables.',
-      img: '/assets/card_bagazo.jpg',
+      img: './assets/card_bagazo.jpg',
       fallback: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=600&auto=format&fit=crop',
     },
     {
@@ -62,7 +62,7 @@ export default function LandingPage({ onNavigate }) {
       title: 'Zeolita Activa',
       subtitle: 'Intercambio iónico a escala micro',
       desc: 'Atrapa selectivamente iones de metales pesados, neutraliza gérmenes, elimina el amoníaco y reduce significativamente la dureza del agua.',
-      img: '/assets/card_zeolita.jpg',
+      img: './assets/card_zeolita.jpg',
       fallback: 'https://img.lalr.co/cms/2015/07/09125829/zeolita0626-000.jpg',
     },
     {
@@ -70,7 +70,7 @@ export default function LandingPage({ onNavigate }) {
       title: 'Arena Silícea',
       subtitle: 'Filtración mecánica primaria',
       desc: 'Retiene los sedimentos gruesos, partículas suspendidas y lodo, garantizando la claridad física antes de las fases microbacterianas.',
-      img: '/assets/card_arena.jpg',
+      img: './assets/card_arena.jpg',
       fallback: 'https://tierrasupplyco.com/cdn/shop/files/9D21B002-5856-4D91-BE4A-2D13B08F7D2D.jpg?v=1775305785&width=1946',
     },
     {
@@ -78,7 +78,7 @@ export default function LandingPage({ onNavigate }) {
       title: 'Telemetría ESP32',
       subtitle: 'Inteligencia y monitoreo continuo',
       desc: 'Mide TDS, claridad y nivel en tiempo real. Envía alertas de mantenimiento y opera de forma offline en áreas remotas sin cobertura.',
-      img: '/assets/card_telemetria.jpg',
+      img: './assets/card_telemetria.jpg',
       fallback: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=600&auto=format&fit=crop',
     },
   ];
