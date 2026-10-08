@@ -63,7 +63,7 @@ export default function LandingPage({ onNavigate }) {
       subtitle: 'Intercambio iónico a escala micro',
       desc: 'Atrapa selectivamente iones de metales pesados, neutraliza gérmenes, elimina el amoníaco y reduce significativamente la dureza del agua.',
       img: './assets/card_zeolita.jpg',
-      fallback: 'https://img.lalr.co/cms/2015/07/09125829/zeolita0626-000.jpg',
+      fallback: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop',
     },
     {
       num: '03',
@@ -71,7 +71,7 @@ export default function LandingPage({ onNavigate }) {
       subtitle: 'Filtración mecánica primaria',
       desc: 'Retiene los sedimentos gruesos, partículas suspendidas y lodo, garantizando la claridad física antes de las fases microbacterianas.',
       img: './assets/card_arena.jpg',
-      fallback: 'https://tierrasupplyco.com/cdn/shop/files/9D21B002-5856-4D91-BE4A-2D13B08F7D2D.jpg?v=1775305785&width=1946',
+      fallback: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=600&auto=format&fit=crop',
     },
     {
       num: '04',
@@ -247,35 +247,44 @@ export default function LandingPage({ onNavigate }) {
                 <div
                   key={idx}
                   onClick={() => setActiveSlide(idx)}
+                  onMouseEnter={(e) => {
+                    if (!isActive) e.currentTarget.style.opacity = '1';
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) e.currentTarget.style.opacity = '0.65';
+                  }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.75rem',
+                    gap: '0.875rem',
                     cursor: 'pointer',
-                    transition: 'var(--transition)',
-                    opacity: isActive ? 1 : 0.4,
+                    transition: 'all 0.3s ease',
+                    opacity: isActive ? '1' : '0.65',
                   }}
                 >
                   {/* Slide number + label */}
                   <div style={{ textAlign: 'right' }}>
                     <span style={{
                       fontFamily: 'var(--font-display)',
-                      fontSize: isActive ? '1.25rem' : '0.95rem',
-                      fontWeight: 700,
-                      color: isActive ? 'hsl(var(--sky))' : 'hsl(var(--text-dim))',
+                      fontSize: isActive ? '1.8rem' : '1.25rem',
+                      fontWeight: 800,
+                      color: isActive ? 'hsl(var(--sky))' : 'rgba(255, 255, 255, 0.7)',
                       display: 'block',
-                      transition: 'var(--transition)',
+                      transition: 'all 0.3s ease',
+                      textShadow: '0 2px 10px rgba(0, 0, 0, 0.95), 0 4px 20px rgba(0, 0, 0, 0.8)',
                     }}>
                       {slide.num}
                     </span>
                     {isActive && (
                       <span style={{
                         fontFamily: 'var(--font-label)',
-                        fontSize: '0.65rem',
-                        fontWeight: 600,
+                        fontSize: '0.8rem',
+                        fontWeight: 700,
                         textTransform: 'uppercase',
                         letterSpacing: '0.08em',
-                        color: 'hsl(var(--text-secondary))',
+                        color: '#ffffff',
+                        display: 'block',
+                        textShadow: '0 2px 8px rgba(0, 0, 0, 0.95), 0 4px 15px rgba(0, 0, 0, 0.8)',
                       }}>
                         {slide.label}
                       </span>
@@ -283,13 +292,14 @@ export default function LandingPage({ onNavigate }) {
                   </div>
                   {/* Dot */}
                   <div style={{
-                    width: isActive ? '10px' : '6px',
-                    height: isActive ? '10px' : '6px',
+                    width: isActive ? '12px' : '8px',
+                    height: isActive ? '12px' : '8px',
                     borderRadius: '50%',
-                    background: isActive ? 'hsl(var(--sky))' : 'hsl(var(--text-dim))',
-                    border: isActive ? '2px solid hsl(var(--sky))' : '1.5px solid hsl(var(--text-dim))',
-                    transition: 'var(--transition)',
+                    background: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
+                    border: isActive ? '2.5px solid hsl(var(--sky))' : '1.5px solid rgba(255, 255, 255, 0.7)',
+                    transition: 'all 0.3s ease',
                     flexShrink: 0,
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.95), 0 4px 15px rgba(0, 0, 0, 0.8)',
                   }} />
                 </div>
               );

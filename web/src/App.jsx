@@ -57,6 +57,9 @@ export default function App() {
         if (!error && data) {
           setAllDevices(data);
         }
+      })
+      .catch((err) => {
+        console.warn("Devices fetch skipped (Supabase offline/paused):", err?.message || err);
       });
 
     // 2. Check if there is a mock session stored
@@ -68,14 +71,22 @@ export default function App() {
       return;
     }
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (session) {
-        fetchProfile(session.user.id);
-      } else {
+    supabase.auth
+      .getSession()
+      .then(({ data }) => {
+        const session = data?.session || null;
+        setSession(session);
+        if (session) {
+          fetchProfile(session.user.id);
+        } else {
+          setLoadingProfile(false);
+        }
+      })
+      .catch((err) => {
+        console.warn("Supabase auth session check failed (offline/paused):", err?.message || err);
+        setSession(null);
         setLoadingProfile(false);
-      }
-    });
+      });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, currentSession) => {
       if (localStorage.getItem("aquora_mock_session")) return;
