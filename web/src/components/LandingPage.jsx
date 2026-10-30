@@ -138,7 +138,7 @@ export default function LandingPage({ onNavigate }) {
             letterSpacing: '-0.02em',
             marginBottom: 'var(--space-lg)',
           }}>
-            Agua Segura, Nutrición Posible e Inteligencia de Datos
+            Agua Segura, Nutrición Posible e Inteligencia de Datos para la Guajira y el Chocó
           </h1>
 
           {/* Slide Detail Panel — with decorative ocean-blue left border */}
